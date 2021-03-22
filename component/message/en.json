@@ -37,18 +37,36 @@
         "biomass" : "Biomass",
         "biomass_ch" :"Biomass change",
         "forest_cov" :"Forest cover",
-        "select_label": "Select process"
+        "select_label": "Select process",
+        "computing" : "Computing {}...",
+        "ready" : "{} tile computed and ready to display",
+        "retrieving_ch" : "Retrieving change tile..."
     },
     "error": {
-        "at_least_year": "Please select at least one year."
+        "at_least_year": "Please select at least one year.",
+        "at_least_process" : "Check at least one process to compute",
+        "before_write": "Before to write, you have to calculate {}",
+        "before_display" : "Before to display, you have to calculate {}",
+        "assert_latitude" : "Latitude must be between -90 and 90 degrees.",
+        "assert_longitude" : "Longitude must be between -180 and 180 degrees.",
+        "assert_downsampling" : "Downsampling factor must be an integer greater than 1.",
+        "assert_lee_filter" : "Option lee_filter must be set to 'True' or 'False'.",
+        "assert_window_size" : "Option window_size must be an integer.",
+        "assert_widown_size_odd" : "Option window_size must be an odd integer.",
+        "assert_contiguity" : "Contiguity constraint must be 'rook' or 'queen'.",
+        "assert_sm" : "Soil moisture interpolation type must be one of 'nearest', 'average' or 'cubic'.",
+        "assert_forest_thr" : "Forest threshold must be numeric.",
+        "assert_area_thr" : "Area threshold must be numeric.",
+        "both_years" : "To calculate change, both years has to be filled"
     },
     "alert" : {
-        "downloading": "Downloading year {0} for lat: {1}, lon: {2}...",
+        "downloading": "Downloading year {} for lat: {}, lon: {}...",
         "decompressing" : "Decompressing year {y}...",
         "decompressingtar" : "Decompressing {}...",
         "done_down" : "Done {} for lat: {}, lon: {}",
         "done_unzip" : "All the images were succesfully unzipped.",
-        "select_proc" : "Select process"
+        "select_proc" : "Select process",
+        "success_export" : "{} succesfully exported in {}"
     },
     "buttons" : {
         "get_outputs" : "Get outputs",
