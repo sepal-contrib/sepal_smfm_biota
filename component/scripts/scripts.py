@@ -1,9 +1,49 @@
 import requests
+import functools
 
 from planet import api
 from planet.api import filters
 
-# from requests.auth import HTTPBasicAuth
+
+def loading(btn, alert):
+    """Decorator to execute try/except sentence
+    and toggle loading button object
+    
+    Params:
+        btn (v.Btn): Button to toggle loading
+        alert (sw.Alert): Alert to display errors
+    
+    Example:
+        
+        class A:
+            
+            # ...
+        
+            self.process = loading(self.btn, self.alert)(self.process)
+
+        def _process_event(self, widget, event, data):
+            self.process()
+
+        def process(self):
+
+            '''This will raise and exception'''
+            sleep(3)
+            assert 1<0, 'This error will be displayed on the alert widget'
+    """
+    def decorator_loading(func):
+        @functools.wraps(func)
+        def wrapper_loading(*args, **kwargs):
+            btn.loading=True
+            try:
+                value = func(*args, **kwargs)
+            except Exception as e:
+                btn.loading=False
+                alert.add_msg(f'{e}', type_='error')
+                raise e
+            btn.loading=False
+            return value
+        return wrapper_loading
+    return decorator_loading
 
 
 class PlanetKey:
@@ -35,50 +75,49 @@ class PlanetKey:
         
         return any(active)
 
-def build_request(aoi_geom, start_date, stop_date, cloud_cover=100):
-    """build a data api search request for PS imagery.
+    def build_request(aoi_geom, start_date, stop_date, cloud_cover=100):
+        """build a data api search request for PS imagery.
 
-    Args:
-        aoi_geom (geojson): 
-        start_date (datetime.datetime)
-        stop_date (datetime.datetime)
+        Args:
+            aoi_geom (geojson): 
+            start_date (datetime.datetime)
+            stop_date (datetime.datetime)
 
-    Returns:
-        Request
-    """
+        Returns:
+            Request
+        """
 
-    query = filters.and_filter(
-        filters.geom_filter(aoi_geom),
-        filters.range_filter('cloud_cover', lte=cloud_cover),
-        filters.date_range('acquired', gt=start_date),
-        filters.date_range('acquired', lt=stop_date)
-    )
+        query = filters.and_filter(
+            filters.geom_filter(aoi_geom),
+            filters.range_filter('cloud_cover', lte=cloud_cover),
+            filters.date_range('acquired', gt=start_date),
+            filters.date_range('acquired', lt=stop_date)
+        )
 
-    # Skipping REScene because is not orthorrectified and 
-    # cannot be clipped.
+        # Skipping REScene because is not orthorrectified and 
+        # cannot be clipped.
 
-    return filters.build_search_request(query, [
-        'PSScene3Band', 
-        'PSScene4Band', 
-        'PSOrthoTile',
-        'REOrthoTile',
-    ])
+        return filters.build_search_request(query, [
+            'PSScene3Band', 
+            'PSScene4Band', 
+            'PSOrthoTile',
+            'REOrthoTile',
+        ])
 
-def get_items(id_name, request, client):
-    """ Get items using the request with the given parameters
-           
-    """
-    result = client.quick_search(request)
- 
-    items_pages = []
-    limit_to_x_pages = None
-    for page in result.iter(limit_to_x_pages):
-        items_pages.append(page.get())
+    def get_items(id_name, request, client):
+        """ Get items using the request with the given parameters
 
-    items = [item for page in items_pages for item in page['features']]
-    
-    
-    return (id_name, items)
+        """
+        result = client.quick_search(request)
+
+        items_pages = []
+        limit_to_x_pages = None
+        for page in result.iter(limit_to_x_pages):
+            items_pages.append(page.get())
+
+        items = [item for page in items_pages for item in page['features']]
+
+        return (id_name, items)
 
 def remove_layers_if(map_, prop, equals_to, _metadata=False):
     """Remove layers with a given property and value
@@ -112,3 +151,10 @@ def remove_layers_if(map_, prop, equals_to, _metadata=False):
         for layer in map_.layers:
             if hasattr(layer, prop):
                 if layer.attribution==equals_to: map_.remove_layer(layer)
+                    
+def round_(x, grid):
+    return grid * round(x/grid)
+
+def assert_errors(self, error):
+    self.w_alert.add_msg(error, type_='error')
+    return error

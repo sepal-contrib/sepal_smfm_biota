@@ -1,30 +1,87 @@
 {
-    "ui": {
-        "default_api" : "Fill and validate your Planet API key.",
-        "fill_api": "Please use a Planet API key and validate it.",
-        "success_api": {
-            "msg": "Your API key is valid", 
-            "type": "success"
+    "process":{
+        "header_title" : "SEPAL BIOTA (BETA)",
+        "header_text" : "The BIOmass Tool for Alos (BIOTA) was developed by LTS International and the University of Edinburgh to calculate above-ground biomass from L-band satallite data in dry forests and savanhas, as well as biomass change and forest degradation.",
+        "output_title": "OUTPUT PROCESS"
+    },
+    "param" : {
+        "opt": {
+            "lee_filter": "Lee filter",
+            "speckle_filter": "Speckle filter",
+            "downsample_factor": "Downsample factor",
+            "window_size": "Window size",
+            "forest_threshold": "Forest threshold",
+            "area_threshold": "Area threshold",
+            "change_area_threshold": "Change area threshold",
+            "change_magnitude_threshold": "Change magnitude threshold",
+            "contiguity": "Contiguity",
+            "sm_interpolation": "SM interpolation",
+            "polarisation": "Polarisation"
         },
-        "fail_api": {
-            "msg": "Your API key is not valid", 
-            "type": "error"
+        "req": {
+            "latitude" : "Latitude",
+            "longitude" : "Longitude",
+            "year1" : "Year 1",
+            "year2" : "Year 2",
+            "largetile" : "Large Tile",
+            "_1grid" : "1x1 grid",
+            "_5grid" : "5x5 grid",
+            "download" : "Download images"
         },
-        "cloud_cover": "Cloud cover",
-        "days_before": "Search up to (days before):",
-        "searching_planet": "Searching planet imagery...",
-        "max_images": "Search up to (number of images):",
-        "planet_title": "Planet imagery settings",
-        "number_images" : "There are {} Planet images.",
-        "one_image" : "There is 1 Planet image.",
-        "no_planet" : "There are not Planet images with the given filters.",
-        "valid_aoi" : "Please select a valid area of interest...",
-        "downloading_alerts" : "Downloading alerts",
-        "alert_number" : "There are {} fire alerts in the last {}.",
-        "clipping" : "Clipping alerts to area of interest...",
-        "insert_api" : "Insert Planet API key",
-        "no_key" : "Wrong Planet API Key." ,
-        "no_latlon" : "Get alerts or click over any place in map." ,
-        "aoi_method" : "AOI method"
+        "sel_param": "Select parameters"
+    },
+    "outputs": {
+        "forest_property" : "Forest property",
+        "ch_type" : "Change type",
+        "gamma" : "Gamma0",
+        "biomass" : "Biomass",
+        "biomass_ch" :"Biomass change",
+        "forest_cov" :"Forest cover",
+        "select_label": "Select process",
+        "computing" : "Computing {}...",
+        "ready" : "{} tile computed and ready to display",
+        "retrieving_ch" : "Retrieving change tile..."
+    },
+    "error": {
+        "at_least_year": "Please select at least one year.",
+        "at_least_process" : "Check at least one process to compute",
+        "before_write": "Before to write, you have to calculate {}",
+        "before_display" : "Before to display, you have to calculate {}",
+        "assert_latitude" : "Latitude must be between -90 and 90 degrees.",
+        "assert_longitude" : "Longitude must be between -180 and 180 degrees.",
+        "assert_downsampling" : "Downsampling factor must be an integer greater than 1.",
+        "assert_lee_filter" : "Option lee_filter must be set to 'True' or 'False'.",
+        "assert_window_size" : "Option window_size must be an integer.",
+        "assert_widown_size_odd" : "Option window_size must be an odd integer.",
+        "assert_contiguity" : "Contiguity constraint must be 'rook' or 'queen'.",
+        "assert_sm" : "Soil moisture interpolation type must be one of 'nearest', 'average' or 'cubic'.",
+        "assert_forest_thr" : "Forest threshold must be numeric.",
+        "assert_area_thr" : "Area threshold must be numeric.",
+        "both_years" : "To calculate change, both years has to be filled"
+    },
+    "alert" : {
+        "downloading": "Downloading year {} for lat: {}, lon: {}...",
+        "decompressing" : "Decompressing year {y}...",
+        "decompressingtar" : "Decompressing {}...",
+        "done_down" : "Done {} for lat: {}, lon: {}",
+        "done_unzip" : "All the images were succesfully unzipped.",
+        "select_proc" : "Select process",
+        "success_export" : "{} succesfully exported in {}"
+    },
+    "buttons" : {
+        "get_outputs" : "Get outputs",
+        "display": "Display",
+        "write" : "Write raster"
     }
 }
+
+
+
+
+
+
+
+
+
+
+
