@@ -518,3 +518,38 @@ class Tabs(v.Card):
         link((self.tabs[0], 'v_model'),(self.content[0], 'v_model'))
         
         super().__init__(**kwargs)
+        
+class Tooltip(v.Tooltip):
+    
+
+    def __init__(self, widget, tooltip, *args, **kwargs):
+        """
+        Custom widget to display tooltip when mouse is over widget
+
+        Args:
+            widget (DOM.widget): widget used to display tooltip
+            tooltip (str): the text to display in the tooltip
+            
+        Example:
+            
+            btn = v.Btn(children=['Button'])
+            Tooltip(widget=btn, tooltip='Click over the button')
+            
+        Warning:
+            Don't change any trait of the Tooltip class, it will make 
+            disappear your widget because a bug in ipyvuetify.
+            
+        """
+        
+        self.tooltip = tooltip
+        self.bottom = True
+        self.widget = widget
+        self.v_slots=[{
+            'name': 'activator',
+            'variable': 'tooltip',
+            'children': self.widget
+        }]
+        self.widget.v_on = 'tooltip.on'
+        self.children = [self.tooltip]
+        
+        super().__init__(*args, **kwargs)

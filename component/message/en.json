@@ -19,6 +19,7 @@
             "polarisation": "Polarisation"
         },
         "req": {
+            "description" : "Note: The following are required parameters, to get coordinates, click a point over the map.",
             "latitude" : "Latitude",
             "longitude" : "Longitude",
             "year1" : "Year 1",
@@ -72,6 +73,9 @@
         "get_outputs" : "Get outputs",
         "display": "Display",
         "write" : "Write raster"
+    },
+    "tooltip" : {
+        "coordinates" : "To get coordinates, click over an area in the map"
     }
 }
 

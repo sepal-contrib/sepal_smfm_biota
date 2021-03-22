@@ -5,6 +5,7 @@ from traitlets import (
     observe, List, Float, Int
 )
 from ..message import cm
+from ..widget.custom_widgets import Tooltip
 from sepal_ui import sepalwidgets as sw
 
 class Optional(v.Card):
@@ -92,6 +93,9 @@ class Required(v.Card):
         w_lat = v.TextField(disabled=True, label=cm.param.req.latitude,v_model=self.lat,)
         w_lon = v.TextField(disabled=True, label=cm.param.req.longitude, v_model=self.lon,)
         
+        w_lat_tooltip = Tooltip(w_lat, cm.tooltip.coordinates)
+        w_lon_tooltip = Tooltip(w_lon, cm.tooltip.coordinates)
+        
         # Valid years for selection
         valid_years = [str(y) for y in list(range(2007,2010+1))+list(range(2015, datetime.now().year+1))]
         
@@ -114,8 +118,9 @@ class Required(v.Card):
         link((w_grid, 'v_model'), (self, 'grid'))
         
         self.children=[
-                w_lon, 
-                w_lat,
+                v.CardText(children=[cm.param.req.description]),
+                w_lon_tooltip, 
+                w_lat_tooltip,
                 w_year_1,
                 w_year_2,
                 w_lg_tile,
