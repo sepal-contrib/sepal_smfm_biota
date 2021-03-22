@@ -1,3 +1,4 @@
+from datetime import datetime
 import ipyvuetify as v
 from traitlets import (
     Bool, CInt, CFloat, Unicode, link,
@@ -78,8 +79,8 @@ class Required(v.Card):
     # Initial widgets
     lat = Float(0).tag(sync=True)
     lon = Float(-75).tag(sync=True)
-    year_1 = Unicode().tag(sync=True)
-    year_2 = Unicode().tag(sync=True)
+    year_1 = Unicode('2017').tag(sync=True)
+    year_2 = Unicode('2016').tag(sync=True)
     large_tile = Bool(True).tag(sync=True)
     grid = Int(5).tag(sync=True)
     
@@ -90,8 +91,13 @@ class Required(v.Card):
         # 1. .Input widgets (Parameters)
         w_lat = v.TextField(disabled=True, label=cm.param.req.latitude,v_model=self.lat,)
         w_lon = v.TextField(disabled=True, label=cm.param.req.longitude, v_model=self.lon,)
-        w_year_1 = v.TextField(label=cm.param.req.year1, type='number', v_model=self.year_1)
-        w_year_2 = v.TextField(label=cm.param.req.year2, type='number',v_model=self.year_2)
+        
+        # Valid years for selection
+        valid_years = [str(y) for y in list(range(2007,2010+1))+list(range(2015, datetime.now().year+1))]
+        
+        w_year_1 = v.Select(label=cm.param.req.year1, items=valid_years, type='number', v_model=self.year_1)
+        w_year_2 = v.Select(label=cm.param.req.year2, items=valid_years, type='number',v_model=self.year_2)
+        
         w_lg_tile = v.Checkbox(label=cm.param.req.largetile, v_model=self.large_tile)
         w_grid = v.RadioGroup(v_model=self.grid,children=[
             v.Radio(label=cm.param.req._1grid, value=1),
