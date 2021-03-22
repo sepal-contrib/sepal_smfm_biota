@@ -8,7 +8,7 @@ from functools import partial
 import ipyvuetify as v
 from traitlets import (
     Unicode, observe, directional_link, 
-    List, Int, Bool, Any
+    List, Int, Bool, Any, link
 )
 
 from sepal_ui.sepalwidgets.sepalwidget import SepalWidget, TYPES
