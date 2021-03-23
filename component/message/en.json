@@ -2,7 +2,9 @@
     "process":{
         "header_title" : "SEPAL BIOTA (BETA)",
         "header_text" : "The BIOmass Tool for Alos (BIOTA) was developed by LTS International and the University of Edinburgh to calculate above-ground biomass from L-band satallite data in dry forests and savanhas, as well as biomass change and forest degradation.",
-        "output_title": "OUTPUT PROCESS"
+        "output_title": "OUTPUT PROCESS",
+        "intro_display":"After computing any of the above processes, you can select one of them in the below dropdown, and display it directly into the window to have a quick overview of the result or you can click over write raster to download it into your sepal account.",
+        "title_display" : "DISPLAY OUTPUTS"
     },
     "param" : {
         "opt": {
