@@ -1,0 +1,93 @@
+{
+    "process":{
+        "header_title" : "SEPAL BIOTA (BETA)",
+        "header_text" : "La herramienta de BIOmass para Alos (BIOTA), fue desarrollada por LTS International y la Universidad de Edinburgh para calcular biomasa aérea de la banda satelital L en bosques secos y sabanas así como cambio de biomasa y degradación de bosques.",
+        "output_title": "PROCESOS DE SALIDA",
+        "intro_display":"Después de ejecutar cualquiera de los procesos previos, puedes seleccionar uno de ellos en la lista desplegable de abajo y mostrar el resultado directamente en la ventana para obtener una rápida vista del resultado o puedes hacer click sobre escribir raster para descargarlo en tu cuenta de SEPAL.",
+        "title_display" : "VISUALIZACIÓN DE SALIDAS"
+    },
+    "param" : {
+        "opt": {
+            "lee_filter": "Filtro Lee",
+            "speckle_filter": "Filtro Speckle",
+            "downsample_factor": "Factor de reducción de muestra",
+            "window_size": "Tamaño de ventana",
+            "forest_threshold": "Umbral de bosque",
+            "area_threshold": "Umbral de área",
+            "change_area_threshold": "Umbral de cambio de área",
+            "change_magnitude_threshold": "Umbral de cambio de magnitud",
+            "contiguity": "Contigüidad",
+            "sm_interpolation": "Interpolación de Humedad del Suelo",
+            "polarisation": "Polarización"
+        },
+        "req": {
+            "description" : "Nota: Los sigueintes son parámetros requeridos, para obtener las coordenadas haz click en un punto sobre el mapa.",
+            "latitude" : "Latitud",
+            "longitude" : "Longitud",
+            "year1" : "Año 1",
+            "year2" : "Año 2",
+            "largetile" : "Tile grande",
+            "_1grid" : "Grilla 1x1",
+            "_5grid" : "Grilla 5x5",
+            "download" : "Descargar imágenes"
+        },
+        "sel_param": "Seleccionar parámetros"
+    },
+    "outputs": {
+        "forest_property" : "Propiedad forestal",
+        "ch_type" : "Tipo de cambio",
+        "gamma" : "Gamma0",
+        "biomass" : "Biomasa",
+        "biomass_ch" :"Cambio de biomasa",
+        "forest_cov" :"Cobertura forestal",
+        "select_label": "Seleccione un proceso",
+        "computing" : "Computando {}...",
+        "ready" : "Escena de {} computada y lista para visualizar",
+        "retrieving_ch" : "Obteniendo escena de cambio..."
+    },
+    "error": {
+        "at_least_year": "Por favor seleccione al menos un año.",
+        "at_least_process" : "Marque al menos un proceso para computar.",
+        "before_write": "Antes de escribir el raster, debes calcular {}",
+        "before_display" : "Antes de visualizar, debes calcular {}",
+        "assert_latitude" : "La latitud debe estar entre -90 y 90 degrees.",
+        "assert_longitude" : "La longitud debe estar  -180 y 180 degrees.",
+        "assert_downsampling" : "El factor de reducción de muestra debe ser un entero mayor que 1.",
+        "assert_lee_filter" : "El filtro Lee debe ser Falso o Verdadero",
+        "assert_window_size" : "La opción de tamaño de ventana debe ser un número entero.",
+        "assert_widown_size_odd" : "La opción de tamaño de ventana debe ser un entero impar.",
+        "assert_contiguity" : "La restricción de contigüidad debe ser 'rook' o 'queen'.",
+        "assert_sm" : "El tipo de interpolación de humedad del suelo debe ser una de las siguientes: 'nearest', 'average' o 'cubic'.",
+        "assert_forest_thr" : "El umbral de bosque debe ser numérico.",
+        "assert_area_thr" : "El umbral de área debe ser numérico.",
+        "both_years" : "Para calcular el cambio, dos fechas deben seleccionarse."
+    },
+    "alert" : {
+        "downloading": "Descargando el año {} para latitud: {} y longitud: {}...",
+        "decompressing" : "Descomprimiendo el año {}...",
+        "decompressingtar" : "Descomprimiendo {}...",
+        "done_down" : "Descarga terminada {} para latitud: {} y longitud: {}",
+        "done_unzip" : "Todas las imágenes fueron descomprimidas satisfactoriamente.",
+        "select_proc" : "Seleccione un proceso",
+        "success_export" : "{} satisfactoriamente exportada en {}"
+    },
+    "buttons" : {
+        "get_outputs" : "Obtener salidas",
+        "display": "Visualizar",
+        "write" : "Escribir raster"
+    },
+    "tooltip" : {
+        "coordinates" : "Para obtener las coordenadas, haz click sobre un punto en el mapa."
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

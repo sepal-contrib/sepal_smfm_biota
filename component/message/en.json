@@ -64,7 +64,7 @@
     },
     "alert" : {
         "downloading": "Downloading year {} for lat: {}, lon: {}...",
-        "decompressing" : "Decompressing year {y}...",
+        "decompressing" : "Decompressing year {}...",
         "decompressingtar" : "Decompressing {}...",
         "done_down" : "Done {} for lat: {}, lon: {}",
         "done_unzip" : "All the images were succesfully unzipped.",
