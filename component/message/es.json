@@ -60,7 +60,8 @@
         "assert_sm" : "El tipo de interpolación de humedad del suelo debe ser una de las siguientes: 'nearest', 'average' o 'cubic'.",
         "assert_forest_thr" : "El umbral de bosque debe ser numérico.",
         "assert_area_thr" : "El umbral de área debe ser numérico.",
-        "both_years" : "Para calcular el cambio, dos fechas deben seleccionarse."
+        "both_years" : "Para calcular el cambio, dos fechas deben seleccionarse.",
+        "y1_lt_y2" : "El año 2 debe ser de un año posterior al año 1."
     },
     "alert" : {
         "downloading": "Descargando el año {} para latitud: {} y longitud: {}...",

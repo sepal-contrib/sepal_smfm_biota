@@ -60,7 +60,8 @@
         "assert_sm" : "Soil moisture interpolation type must be one of 'nearest', 'average' or 'cubic'.",
         "assert_forest_thr" : "Forest threshold must be numeric.",
         "assert_area_thr" : "Area threshold must be numeric.",
-        "both_years" : "To calculate change, both years has to be filled"
+        "both_years" : "To calculate change, both years has to be filled",
+        "y1_lt_y2" : "Input Year 2 must be from a later year than Year 1."
     },
     "alert" : {
         "downloading": "Downloading year {} for lat: {}, lon: {}...",
