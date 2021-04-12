@@ -242,7 +242,7 @@ class Parameters(v.Layout):
         self.w_alert.add_msg(cm.alert.decompressing.format(y), type_='info')
         self._decompress()
         
-        self.w_alert.add_msg(cm.alert.done_down.format(years, lat, lon), type_='info')
+        self.w_alert.add_msg(cm.alert.done_down.format(y, lat, lon), type_='info')
 
     def _decompress(self):
         
