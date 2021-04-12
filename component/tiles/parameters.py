@@ -1,12 +1,21 @@
-from datetime import datetime
+from biota import download as dw
+from pathlib import Path
+import os
+from datetime import datetime 
+
+from ipywidgets import Output
 import ipyvuetify as v
+
 from traitlets import (
     Bool, CInt, CFloat, Unicode, link,
     observe, List, Float, Int
 )
-from ..message import cm
-from ..widget.custom_widgets import Tooltip
 from sepal_ui import sepalwidgets as sw
+
+from ..message import cm
+from ..scripts.scripts import *
+from ..widget.custom_widgets import *
+
 
 class Optional(v.Card):
     
@@ -80,8 +89,8 @@ class Required(v.Card):
     # Initial widgets
     lat = Float(0).tag(sync=True)
     lon = Float(-75).tag(sync=True)
-    year_1 = Unicode('2017').tag(sync=True)
-    year_2 = Unicode('2016').tag(sync=True)
+    year_1 = Unicode('2016').tag(sync=True)
+    year_2 = Unicode('2017').tag(sync=True)
     large_tile = Bool(True).tag(sync=True)
     grid = Int(5).tag(sync=True)
     
@@ -127,3 +136,120 @@ class Required(v.Card):
                 w_grid,
                 self.w_download
         ]
+
+class Parameters(v.Layout):
+    
+    def __init__(self, map_=None, **kwargs):
+        
+        # Widget classes
+        self.class_ = "flex-column pa-2"
+        self.row = True
+        self.xs12 = True
+
+        super().__init__(**kwargs)
+        
+        # Parameters
+        
+        self.map_ = map_
+        
+        # Set-up workspace
+        self._workspace()
+        self.PARAMETER_FILE = os.path.join(os.getcwd(), 'biota/cfg/McNicol2018.csv')
+        
+        # Set up process parameters
+        self.required = Required(class_='pa-4')
+        self.optional = Optional(class_='pa-4')
+        
+        # Alerts
+        self.w_alert = Alert(children=[cm.param.sel_param]).show()
+        self.ou_progress = Output()
+
+        # Events
+        self.required.w_download.on_event('click', self._download_event)
+
+        self.children = [
+            
+            v.Card(children=[
+                v.CardTitle(children=[cm.process.header_title]), 
+                v.CardText(children=[cm.process.header_text])
+            ]),
+            
+            v.Row(class_="d-flex flex-row ", xs12=True, md6=True,
+               children=[
+                    v.Col(children=[
+                        Tabs(['Required inputs', 'Optional inputs'],
+                             [self.required, self.optional])
+                    ]),
+                    v.Col(
+                        children=[
+                            v.Card(class_='pa-2 justify-center', children=[
+                                map_
+                            ])
+                        ]
+                    ),
+            ]),
+            v.Card(class_="flex-row pa-2 mb-3", children=[
+                self.w_alert,
+            ]),
+        ]
+        
+        # Decorate self._download() method
+        self._download = loading(self.required.w_download, self.w_alert)(self._download)
+        
+    def _workspace(self):
+        """ Creates the workspace necessary to store the data
+
+        return:
+            Returns environment Paths
+
+        """
+
+        base_dir = Path('~').expanduser()
+
+        root_dir = base_dir/'module_results/smfm'
+        data_dir = root_dir/'data'
+        output_dir = root_dir/'outputs'
+
+        root_dir.mkdir(parents=True, exist_ok=True)
+        data_dir.mkdir(parents=True, exist_ok=True)
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        self.root_dir = root_dir
+        self.data_dir  = data_dir
+        self.output_dir = output_dir
+
+    def _download_event(self, *args):
+        
+        years = [int(year) for year in [self.required.year_1, self.required.year_2] if year]
+        lat = round_(self.required.lat, self.required.grid)
+        lon = round_(self.required.lon, self.required.grid)
+        assert (years != []), assert_errors(self, cm.error.at_least_year)
+        
+        for y in years:
+            try:
+                self._download(lat, lon, y)
+            except:
+                pass
+            
+    def _download(self, *args):
+        
+        lat, lon, y = args
+        self.w_alert.add_msg(cm.alert.downloading.format(y,lat,lon), type_='info')
+        dw.download(lat,lon,y,
+                    large_tile=self.required.large_tile, 
+                    output_dir=self.data_dir, 
+                    verbose=True)
+        self.w_alert.add_msg(cm.alert.decompressing.format(y), type_='info')
+        self._decompress()
+        
+        self.w_alert.add_msg(cm.alert.done_down.format(years, lat, lon), type_='info')
+
+    def _decompress(self):
+        
+        tar_files = list(self.data_dir.glob('*.tar.gz'))
+
+        for tar in tar_files:
+            if not os.path.exists(os.path.join(self.data_dir, tar.name[:-7])):
+                self.w_alert.add_msg(cm.alert.decompressingtar.format(tar.name), type_='info')
+                dw.decompress(str(tar))
+                self.w_alert.add_msg(cm.alert.done_unzip, type_='success')

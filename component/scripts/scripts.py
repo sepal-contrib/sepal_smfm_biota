@@ -3,6 +3,7 @@ import functools
 
 from planet import api
 from planet.api import filters
+from ipyleaflet import Marker
 
 
 def loading(btn, alert):
@@ -158,3 +159,15 @@ def round_(x, grid):
 def assert_errors(self, error):
     self.w_alert.add_msg(error, type_='error')
     return error
+
+def return_coordinates(map_, parameters, **kwargs):
+    if kwargs.get('type') == 'click':
+
+        # Remove markdown if there is one
+        map_.remove_last_layer()
+
+        lat, lon = kwargs.get('coordinates')
+
+        map_.add_layer(Marker(location=kwargs.get('coordinates')))
+        parameters.required.lat = round(lat,2)
+        parameters.required.lon = round(lon,2)
