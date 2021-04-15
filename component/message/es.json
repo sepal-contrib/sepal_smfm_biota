@@ -34,7 +34,9 @@
         "sel_param": "Seleccionar parámetros"
     },
     "outputs": {
-        "forest_property" : "Propiedad forestal",
+        "forest_property" : "Propiedades del Bosque",
+        "forest_ch_p" : "Cambio de bosque",
+        "def_risk" : "Riesgo de deforestación",
         "ch_type" : "Tipo de cambio",
         "gamma" : "Gamma0",
         "biomass" : "Biomasa",
@@ -43,7 +45,11 @@
         "select_label": "Seleccione un proceso",
         "computing" : "Computando {}...",
         "ready" : "Escena de {} computada y lista para visualizar",
-        "retrieving_ch" : "Obteniendo escena de cambio..."
+        "retrieving_ch" : "Obteniendo escena de cambio...",
+        "tooltips": {
+            "y1" : "Primer año seleccionado en la pestaña de parámetros",
+            "y2" : "Segundo año seleccionado en la pestaña de parámetros"
+        }
     },
     "error": {
         "at_least_year": "Por favor seleccione al menos un año.",
@@ -73,7 +79,10 @@
         "success_export" : "{} satisfactoriamente exportada en {}"
     },
     "buttons" : {
-        "get_outputs" : "Obtener salidas",
+        "get_outputs" : {
+            "label":"Obtener salidas",
+            "tooltip":"Se procesarán todas las propiedades seleccionadas"
+        },
         "display": "Visualizar",
         "write" : "Escribir raster"
     },
