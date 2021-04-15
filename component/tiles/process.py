@@ -22,7 +22,7 @@ class Process(v.Card):
     forest_p = Bool(False).tag(sync=True)
     gamma0 = Bool(False).tag(sync=True)
     biomass = Bool(False).tag(sync=True)
-    forest_cv = Bool(False).tag(sync=True)
+    forest_cov = Bool(False).tag(sync=True)
 
     forest_ch_p = Bool(False).tag(sync=True)
     biomass_ch = Bool(False).tag(sync=True)
@@ -42,23 +42,23 @@ class Process(v.Card):
         self.change_tile = None
         
         self.gamma0_tile = None
-        self.agb_tile = None
-        self.biomass_change_tile = None
-        self.forest_change_code = None
-        
-        self._observe_forest_p()
+        self.biomass_tile = None
+        self.biomass_ch_tile = None
+        self.forest_ch_tile = None
+        self.forest_cov_tile = None
+        self.def_risk_tile = None
         
         self.w_alert = Alert(children=[cm.alert.select_proc]).show()
         
         w_forest_p = v.Checkbox(label=cm.outputs.forest_property, class_='pl-5', v_model=self.forest_p)
-        w_gamma0 = v.Checkbox(label=cm.outputs.gamma, class_='pl-5', v_model=self.gamma0)
-        w_biomass = v.Checkbox(label=cm.outputs.biomass, class_='pl-5', v_model=self.biomass)
-        w_forest_cv = v.Checkbox(label=cm.outputs.forest_cov, class_='pl-5', v_model=self.forest_cv)
+        self.w_gamma0 = CheckboxState(label=cm.outputs.gamma, v_model=self.gamma0)
+        self.w_biomass = CheckboxState(label=cm.outputs.biomass, v_model=self.biomass)
+        self.w_forest_cov = CheckboxState(label=cm.outputs.forest_cov, v_model=self.forest_cov)
        
         w_forest_ch_p = v.Checkbox(label=cm.outputs.forest_ch_p, class_='pl-5', v_model=self.forest_ch_p)
-        w_biomass_ch = v.Checkbox(label=cm.outputs.biomass_ch, class_='pl-5', v_model=self.biomass_ch)
-        w_forest_ch = v.Checkbox(label=cm.outputs.ch_type, class_='pl-5', v_model=self.forest_ch)
-        w_def_risk = v.Checkbox(label=cm.outputs.def_risk, class_='pl-5', v_model=self.def_risk)
+        self.w_biomass_ch = CheckboxState(label=cm.outputs.biomass_ch, v_model=self.biomass_ch)
+        self.w_forest_ch = CheckboxState(label=cm.outputs.ch_type, v_model=self.forest_ch)
+        self.w_def_risk = CheckboxState(label=cm.outputs.def_risk, v_model=self.def_risk)
         
         w_year_1 = v.TextField(v_model=self.param.required.year_1, disabled=True)
         w_year_2 = v.TextField(v_model=self.param.required.year_2, disabled=True)
@@ -90,17 +90,14 @@ class Process(v.Card):
         # Linked widgets
 
         link((w_forest_p, 'v_model'), (self, 'forest_p'))
-        link((w_gamma0, 'v_model'), (self, 'gamma0'))
-        link((w_biomass, 'v_model'), (self, 'biomass'))        
-        link((w_forest_cv, 'v_model'), (self, 'forest_cv'))
+        link((self.w_gamma0, 'v_model'), (self, 'gamma0'))
+        link((self.w_biomass, 'v_model'), (self, 'biomass'))        
+        link((self.w_forest_cov, 'v_model'), (self, 'forest_cov'))
         
         link((w_forest_ch_p, 'v_model'), (self, 'forest_ch_p'))
-        link((w_biomass_ch, 'v_model'), (self, 'biomass_ch'))
-        link((w_forest_ch, 'v_model'), (self, 'forest_ch'))
-        link((w_def_risk, 'v_model'), (self, 'def_risk'))
-        
-        link((self.w_select_output, 'items'), (self, 'true_cb'))
-        
+        link((self.w_biomass_ch, 'v_model'), (self, 'biomass_ch'))
+        link((self.w_forest_ch, 'v_model'), (self, 'forest_ch'))
+        link((self.w_def_risk, 'v_model'), (self, 'def_risk'))        
         
         self.btn_process.on_event('click', partial(self._event, func=self._process))
         self.btn_add_map.on_event('click', partial(self._event, func=self._display))
@@ -111,11 +108,11 @@ class Process(v.Card):
                 v.CardText(class_="d-flex flex-row", children=[
                     v.Col(children=[
                         sw.Tooltip(v.Flex(children=[w_year_1]), cm.outputs.tooltips.y1, top=True, bottom=False), 
-                        w_forest_p, v.Divider(), w_gamma0, w_biomass, w_forest_cv,]),
+                        w_forest_p, v.Divider(), self.w_gamma0, self.w_biomass, self.w_forest_cov,]),
                     v.Divider(inset=True, vertical=True),
                     v.Col(children=[
                         sw.Tooltip(v.Flex(children=[w_year_2]), cm.outputs.tooltips.y2, top=True, bottom=False), 
-                        w_forest_ch_p, v.Divider(), w_biomass_ch, w_forest_ch, w_def_risk,]),
+                        w_forest_ch_p, v.Divider(),self. w_biomass_ch, self.w_forest_ch, self.w_def_risk,]),
                 ]),
                 sw.Tooltip(self.btn_process, cm.buttons.get_outputs.tooltip)
             ]),
@@ -153,26 +150,21 @@ class Process(v.Card):
         func()
     
     @observe('forest_ch', 'gamma0', 
-             'biomass', 'biomass_ch', 'forest_cv', 'def_risk')
+             'biomass', 'biomass_ch', 'forest_cov', 'def_risk')
     def _observe_forest_p(self, *args):
-        labels = {
-            cm.outputs.gamma : self.gamma0,
-            cm.outputs.biomass : self.biomass,
-            cm.outputs.forest_cov : self.forest_cv,
-            cm.outputs.ch_type : self.forest_ch,
-            cm.outputs.biomass_ch : self.biomass_ch,
-            cm.outputs.def_risk : self.def_risk
-        }
-
-        self.true_cb = [k for k, v in labels.items() if v is True]
+        """Get a list of current active processes (checkboxes)"""
+        self._get_tiles_dictionary()
+        self.true_cb = [k for k, v in self.TILES.items() if v[0] is True]
         
     @observe('forest_p')
     def _select_forest_property(self, change):
-        self.gamma0 = self.biomass = self.forest_cv = change['new']
+        """Activate/deactivate all forest property checkboxes"""
+        self.gamma0 = self.biomass = self.forest_cov = change['new']
     
     @observe('forest_ch_p')
     def _select_change_property(self, change):
-        self.forest_ch = self.biomass_ch = self.def_risk = change['new']
+        """Activate/deactivate all forest change checkboxes"""
+        self.biomass_ch = self.forest_ch  = self.def_risk = change['new']
     
     def _validate_inputs(self):
         
@@ -190,23 +182,44 @@ class Process(v.Card):
         assert self.param.required.year_1 <= self.param.required.year_2, assert_errors(self, cm.error.y1_lt_y2)
 
     def _load_tile(self, year):
-
         try:
-            tile = biota.LoadTile(str(self.param.data_dir), 
-                                       round_(self.param.required.lat, self.param.required.grid), 
-                                       round_(self.param.required.lon, self.param.required.grid), 
-                                       year,
-                                       parameter_file = self.param.PARAMETER_FILE,
-                                       lee_filter = self.param.optional.lee_filter, 
-                                       forest_threshold = self.param.optional.forest_threshold, 
-                                       area_threshold = self.param.optional.area_threshold, 
-                                       output_dir = str(self.param.output_dir))
+            tile = biota.LoadTile(
+                str(self.param.data_dir), 
+                round_(self.param.required.lat, self.param.required.grid), 
+                round_(self.param.required.lon, self.param.required.grid), 
+                year,
+                downsample_factor = self.param.optional.downsample_factor,
+                parameter_file = self.param.PARAMETER_FILE,
+                lee_filter = self.param.optional.lee_filter, 
+                forest_threshold = self.param.optional.forest_threshold, 
+                area_threshold = self.param.optional.area_threshold, 
+                output_dir = str(self.param.output_dir)
+            )
             return tile
         
         except Exception as e:
             
             self.w_alert.add_msg(f'{e}', type_='error')
             raise
+            
+    def _get_tiles_dictionary(self):
+        
+        # Wrap attributes, widget, and tile in a dictionary
+        self.TILES = {
+            # label : [attribute, widget, tile]
+            cm.outputs.gamma : [self.gamma0, self.w_gamma0, self.gamma0_tile],
+            cm.outputs.biomass : [self.biomass, self.w_biomass, self.biomass_tile],
+            cm.outputs.forest_cov : [self.forest_cov, self.w_forest_cov, self.forest_cov_tile],
+            cm.outputs.ch_type : [self.forest_ch, self.w_forest_ch, self.forest_ch_tile],
+            cm.outputs.biomass_ch : [self.biomass_ch, self.w_biomass_ch, self.biomass_ch_tile],
+            cm.outputs.def_risk : [self.def_risk, self.w_def_risk, self.def_risk_tile]
+        }
+    
+    def _get_processed_tiles(self):
+        """Get tiles that are already processed and ready for view or write"""
+        self._get_tiles_dictionary()
+        self.w_select_output.items = [name for name, v in self.TILES.items() if v[2] is not None]
+
     
     def _process(self):
         """Event trigger when btn_process is clicked
@@ -224,20 +237,32 @@ class Process(v.Card):
                 
         for process in self.true_cb:
             self.w_alert.reset()
-            if process == 'Gamma0':
-                self.w_alert.type_='info'
+            if process in ['Gamma0', 'Biomass', 'Forest cover']:
+                
+                self.w_alert.type='info'
                 self.w_alert.append_msg(cm.outputs.computing.format(process))
-                self.gamma0_tile = self.tile_1.getGamma0(polarisation = self.param.optional.polarisation, units = 'decibels')
+                
+                if process == 'Gamma0':
+                    self.w_gamma0.running()
+                    self.gamma0_tile = self.tile_1.getGamma0(
+                        polarisation = self.param.optional.polarisation, 
+                        units = 'decibels'
+                    )
+                    self.w_gamma0.done()
+                elif process == 'Biomass':
+                    self.w_biomass.running()
+                    self.biomass_tile = self.tile_1.getAGB()
+                    self.w_biomass.done()
+                    
+                elif process == 'Forest cover':
+                    self.w_forest_cov.running()
+                    self.forest_cov_tile = self.tile_1.getWoodyCover()
+                    self.w_forest_cov.done()
+                
                 self.w_alert.append_msg(cm.outputs.ready.format(process))
-                self.w_alert.type_='success'
+                self.w_alert.type='success'
 
-            elif process == 'Biomass':
-                self.w_alert.append_msg(cm.outputs.computing.format(process))
-                self.w_alert.type_='info'
-                self.agb_tile = self.tile_1.getAGB()
-                self.w_alert.append_msg(cm.outputs.ready.format(process))
-
-            elif process in ['Biomass change', 'Change type']:
+            elif process in ['Biomass change', 'Change type', 'Deforestation risk']:
 
                 self.w_alert.add_msg(cm.outputs.retrieving_ch)
                 assert all((self.param.required.year_1 , self.param.required.year_2)), assert_errors(self, cm.error.both_years)
@@ -254,16 +279,28 @@ class Process(v.Card):
                 self.w_alert.type_='info'
                 
                 if process == 'Biomass change':
-                    self.biomass_change_tile = self.change_tile.getAGBChange()
+                    self.w_biomass_ch.running()
+                    self.biomass_ch_tile = self.change_tile.getAGBChange()
+                    self.w_biomass_ch.done()
 
                 elif process == 'Change type':
+                    self.w_forest_ch.running()
                     self.change_tile.getChangeType()
-                    self.forest_change_code = self.change_tile.ChangeCode
+                    self.forest_ch_tile = self.change_tile.ChangeCode
+                    self.w_forest_ch.done()
+                    
+                elif process == 'Deforestation risk':
+                    self.w_def_risk.running()
+                    self.def_risk_tile = self.change_tile.getRiskMap()
+                    self.w_def_risk.done()
                     
                 self.w_alert.append_msg(cm.outputs.ready.format(process))
                 self.w_alert.type='success'
             else:
                 self.w_alert.append_msg(cm.error.at_least_process)
+        
+        # Update state of display/write select widget
+        self._get_processed_tiles()
                         
     def _write_raster(self):
         """Write processed raster
@@ -274,26 +311,19 @@ class Process(v.Card):
             widget (ipywidgets): w_select_output with list of possible processed rasters (self.TILES)
                                 
         """
-                
-        TILES = {
-            # Add new tiles when are avaiable
-            'Gamma0': self.gamma0_tile,
-            'Biomass': self.agb_tile,
-            'Biomass change': self.biomass_change_tile,
-            'Change type': self.forest_change_code
-        }
         
         # Get current raster tile name
         tile_name = self.w_select_output.v_model
         
         # Get tile from selected dropdown
-        tile = TILES[tile_name]
+        self._get_tiles_dictionary()
+        tile = self.TILES[tile_name][2]
         assert (tile is not None), assert_errors(self, cm.error.before_write.format(tile_name))
         
-        if tile_name in ['Biomass', 'Gamma0', 'Biomass change']:
+        if tile_name in ['Biomass', 'Gamma0', 'Biomass change', 'Deforestation risk']:
             self.tile_1._LoadTile__outputGeoTiff(tile, tile_name)
 
-        elif tile_name in ['Change type']:
+        elif tile_name in ['Change type', 'Forest cover']:
             self.tile_1._LoadTile__outputGeoTiff(tile, tile_name, dtype = gdal.GDT_Byte)
 
         self.w_alert.add_msg(cm.alert.success_export.format(tile_name, self.param.output_dir), type_='success')
@@ -308,19 +338,13 @@ class Process(v.Card):
             widget (ipywidgets): w_select_output with list of possible processed rasters (self.TILES)
                                 
         """
-        TILES = {
-            # Add new tiles when are avaiable
-            'Gamma0': self.gamma0_tile,
-            'Biomass': self.agb_tile,
-            'Biomass change': self.biomass_change_tile,
-            'Change type': self.forest_change_code
-        }
                 
         # Get current raster tile name
         tile_name = self.w_select_output.v_model
         
         # Get tile from selected dropdown
-        tile = TILES[tile_name]
+        self._get_tiles_dictionary()
+        tile = self.TILES[tile_name][2]
         assert (tile is not None), assert_errors(self, cm.error.before_display.format(tile_name))
         
         with self.ou_display:
@@ -330,6 +354,9 @@ class Process(v.Card):
             elif tile_name == 'Gamma0':
                 title, cbartitle, vmin, vmax, cmap = f'Gamma0 {self.param.optional.polarisation}', \
                                                     'decibels', -20, -10, 'Greys_r'
+            elif tile_name == 'Forest cover':
+                title, cbartitle, vmin, vmax, cmap = f'Woody Cover', 'decibels', 0, 1, 'summer_r'
+                        
             elif tile_name == 'Biomass change':
                 title, cbartitle, vmin, vmax, cmap = 'AGB Change', 'tC/ha', -10, 10, 'YlGn'
             
@@ -343,7 +370,10 @@ class Process(v.Card):
                 
                 # Overwrite current tile with new change_code_display
                 tile, title, cbartitle, vmin, vmax, cmap = change_code_display, 'Change type', 'Type', 1, 6, 'Spectral'
-
+            
+            elif tile_name == 'Deforestation risk':
+                title, cbartitle, vmin, vmax, cmap = 'Deforestation risk map', 'Low - High risk', 0, 3, 'autumn'
+                
             # Show arrays with showArray method from LoadTile object
             # We are just using this method to display any tile with the given UI.lat and UI.lon
             self.tile_1._LoadTile__showArray(tile, title, cbartitle, vmin, vmax, cmap)

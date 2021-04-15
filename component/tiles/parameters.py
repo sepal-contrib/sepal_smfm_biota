@@ -154,8 +154,8 @@ class Required(v.Card):
         w_lat = v.TextField(disabled=True, label=cm.param.req.latitude,v_model=self.lat,)
         w_lon = v.TextField(disabled=True, label=cm.param.req.longitude, v_model=self.lon,)
         
-        w_lat_tooltip = Tooltip(w_lat, cm.tooltip.coordinates)
-        w_lon_tooltip = Tooltip(w_lon, cm.tooltip.coordinates)
+        w_lat_tooltip = sw.Tooltip(w_lat, cm.tooltip.coordinates)
+        w_lon_tooltip = sw.Tooltip(w_lon, cm.tooltip.coordinates)
         
         # Valid years for selection
         valid_years = [str(y) for y in list(range(2007,2010+1))+list(range(2015, datetime.now().year+1))]
