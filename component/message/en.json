@@ -35,6 +35,8 @@
     },
     "outputs": {
         "forest_property" : "Forest property",
+        "forest_ch_p" : "Forest change",
+        "def_risk" : "Deforestation risk",
         "ch_type" : "Change type",
         "gamma" : "Gamma0",
         "biomass" : "Biomass",
@@ -43,7 +45,11 @@
         "select_label": "Select process",
         "computing" : "Computing {}...",
         "ready" : "{} tile computed and ready to display",
-        "retrieving_ch" : "Retrieving change tile..."
+        "retrieving_ch" : "Retrieving change tile...",
+        "tooltips": {
+            "y1" : "First year selected in parameters tab",
+            "y2" : "Second year selected in parameters tab"
+        }
     },
     "error": {
         "at_least_year": "Please select at least one year.",
@@ -73,7 +79,10 @@
         "success_export" : "{} succesfully exported in {}"
     },
     "buttons" : {
-        "get_outputs" : "Get outputs",
+        "get_outputs" : {
+            "label":"Get outputs",
+            "tooltip":"It will process all selected properties"
+        },
         "display": "Display",
         "write" : "Write raster"
     },
