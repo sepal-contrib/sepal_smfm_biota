@@ -4,7 +4,7 @@ import gdal
 
 import biota
 
-from ipywidgets import Output
+from ipywidgets import Output, jslink
 import ipyvuetify as v
 from traitlets import (
     Bool, List, link
@@ -20,16 +20,21 @@ class Process(v.Card):
 
     # Process widgets
     forest_p = Bool(False).tag(sync=True)
-    forest_ch = Bool(False).tag(sync=True)
     gamma0 = Bool(False).tag(sync=True)
     biomass = Bool(False).tag(sync=True)
-    biomass_ch = Bool(False).tag(sync=True)
     forest_cv = Bool(False).tag(sync=True)
+
+    forest_ch_p = Bool(False).tag(sync=True)
+    biomass_ch = Bool(False).tag(sync=True)
+    forest_ch = Bool(False).tag(sync=True)
+    def_risk = Bool(False).tag(sync=True)
     
     # Outputs
     true_cb = List([]).tag(sync=True)
     
     def __init__(self, parameters, **kwargs):
+                
+        super().__init__(**kwargs)
         
         self.param = parameters
         self.tile_1 = None
@@ -43,17 +48,24 @@ class Process(v.Card):
         
         self._observe_forest_p()
         
-        super().__init__(**kwargs)
-        
-        
         self.w_alert = Alert(children=[cm.alert.select_proc]).show()
         
-        w_forest_p = v.Checkbox(label=cm.outputs.forest_property, class_='pl-5', v_model=self.forest_p, disabled=True)
-        w_forest_ch = v.Checkbox(label=cm.outputs.ch_type, class_='pl-5', v_model=self.forest_ch)
+        w_forest_p = v.Checkbox(label=cm.outputs.forest_property, class_='pl-5', v_model=self.forest_p)
         w_gamma0 = v.Checkbox(label=cm.outputs.gamma, class_='pl-5', v_model=self.gamma0)
         w_biomass = v.Checkbox(label=cm.outputs.biomass, class_='pl-5', v_model=self.biomass)
+        w_forest_cv = v.Checkbox(label=cm.outputs.forest_cov, class_='pl-5', v_model=self.forest_cv)
+       
+        w_forest_ch_p = v.Checkbox(label=cm.outputs.forest_ch_p, class_='pl-5', v_model=self.forest_ch_p)
         w_biomass_ch = v.Checkbox(label=cm.outputs.biomass_ch, class_='pl-5', v_model=self.biomass_ch)
-        w_forest_cv = v.Checkbox(label=cm.outputs.forest_cov, class_='pl-5', v_model=self.forest_cv, disabled=True)
+        w_forest_ch = v.Checkbox(label=cm.outputs.ch_type, class_='pl-5', v_model=self.forest_ch)
+        w_def_risk = v.Checkbox(label=cm.outputs.def_risk, class_='pl-5', v_model=self.def_risk)
+        
+        w_year_1 = v.TextField(v_model=self.param.required.year_1, disabled=True)
+        w_year_2 = v.TextField(v_model=self.param.required.year_2, disabled=True)
+        
+        jslink((w_year_1, 'v_model'), (self.param.required, 'year_1'))
+        jslink((w_year_2, 'v_model'), (self.param.required, 'year_2'))
+        
         
         # Output widgets
         self.ou_display = Output()
@@ -70,7 +82,7 @@ class Process(v.Card):
             items=self.true_cb, 
             v_model=None, 
             label=cm.outputs.select_label)
-        self.btn_process = sw.Btn(cm.buttons.get_outputs, class_='pl-5')
+        self.btn_process = sw.Btn(cm.buttons.get_outputs.label, class_='pl-5')
         
         self.btn_add_map = sw.Btn(cm.buttons.display, class_='ms-4')
         self.btn_write_raster = sw.Btn(cm.buttons.write, class_='ml-5')
@@ -78,25 +90,34 @@ class Process(v.Card):
         # Linked widgets
 
         link((w_forest_p, 'v_model'), (self, 'forest_p'))
-        link((w_forest_ch, 'v_model'), (self, 'forest_ch'))
         link((w_gamma0, 'v_model'), (self, 'gamma0'))
-        link((w_biomass, 'v_model'), (self, 'biomass'))
-        link((w_biomass_ch, 'v_model'), (self, 'biomass_ch'))
+        link((w_biomass, 'v_model'), (self, 'biomass'))        
         link((w_forest_cv, 'v_model'), (self, 'forest_cv'))
+        
+        link((w_forest_ch_p, 'v_model'), (self, 'forest_ch_p'))
+        link((w_biomass_ch, 'v_model'), (self, 'biomass_ch'))
+        link((w_forest_ch, 'v_model'), (self, 'forest_ch'))
+        link((w_def_risk, 'v_model'), (self, 'def_risk'))
+        
         link((self.w_select_output, 'items'), (self, 'true_cb'))
+        
         
         self.btn_process.on_event('click', partial(self._event, func=self._process))
         self.btn_add_map.on_event('click', partial(self._event, func=self._display))
         self.btn_write_raster.on_event('click', partial(self._event, func=self._write_raster))
         
-        self.children=[v.Card(children=[
+        self.children=[v.Card(class_='pa-4', children=[
                 v.CardTitle(children=[cm.process.output_title]),
                 v.CardText(class_="d-flex flex-row", children=[
-                    v.Col(children=[w_forest_p,w_forest_ch,]),
-                    v.Col(children=[w_gamma0,w_biomass,]),
-                    v.Col(children=[w_forest_cv, w_biomass_ch,]),
-                    self.btn_process
-                ])
+                    v.Col(children=[
+                        sw.Tooltip(v.Flex(children=[w_year_1]), cm.outputs.tooltips.y1, top=True, bottom=False), 
+                        w_forest_p, v.Divider(), w_gamma0, w_biomass, w_forest_cv,]),
+                    v.Divider(inset=True, vertical=True),
+                    v.Col(children=[
+                        sw.Tooltip(v.Flex(children=[w_year_2]), cm.outputs.tooltips.y2, top=True, bottom=False), 
+                        w_forest_ch_p, v.Divider(), w_biomass_ch, w_forest_ch, w_def_risk,]),
+                ]),
+                sw.Tooltip(self.btn_process, cm.buttons.get_outputs.tooltip)
             ]),
             self.w_alert,
             v.Card(
@@ -131,20 +152,27 @@ class Process(v.Card):
         """
         func()
     
-    @observe('forest_p', 'forest_ch', 'gamma0', 
-             'biomass', 'biomass_ch', 'forest_cv')
-    def _observe_forest_p(self, change=None):
+    @observe('forest_ch', 'gamma0', 
+             'biomass', 'biomass_ch', 'forest_cv', 'def_risk')
+    def _observe_forest_p(self, *args):
         labels = {
-            cm.outputs.forest_property : self.forest_p,
-            cm.outputs.ch_type : self.forest_ch,
             cm.outputs.gamma : self.gamma0,
             cm.outputs.biomass : self.biomass,
+            cm.outputs.forest_cov : self.forest_cv,
+            cm.outputs.ch_type : self.forest_ch,
             cm.outputs.biomass_ch : self.biomass_ch,
-            cm.outputs.forest_cov : self.forest_cv
+            cm.outputs.def_risk : self.def_risk
         }
 
         self.true_cb = [k for k, v in labels.items() if v is True]
         
+    @observe('forest_p')
+    def _select_forest_property(self, change):
+        self.gamma0 = self.biomass = self.forest_cv = change['new']
+    
+    @observe('forest_ch_p')
+    def _select_change_property(self, change):
+        self.forest_ch = self.biomass_ch = self.def_risk = change['new']
     
     def _validate_inputs(self):
         
