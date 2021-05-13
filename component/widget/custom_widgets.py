@@ -26,7 +26,7 @@ class CheckboxState(v.Flex):
         
         self.children=[
             self.checkbox,
-            self.state
+            Tooltip(self.state, 'Not processed',bottom=False, right=True)
         ]
         
         link((self, 'v_model'),(self.checkbox, 'v_model'))
