@@ -192,7 +192,6 @@ class Required(v.Card):
 class Optional(v.Card):
     
     lee_filter = Bool(True).tag(sync=True)
-    speckle_filter = Bool(True).tag(sync=True)
     
     downsample_factor = CInt(1).tag(sync=True)
     window_size = CInt(5).tag(sync=True)
@@ -212,7 +211,6 @@ class Optional(v.Card):
         super().__init__(**kwargs)
         
         w_lee_filter = v.Checkbox(label=cm.param.opt.lee_filter, v_model=self.lee_filter)
-        w_speckle_filter = v.Checkbox(label=cm.param.opt.speckle_filter, v_model=self.speckle_filter)
         
         w_downsample_factor = v.TextField(label=cm.param.opt.downsample_factor, type='number', v_model=self.downsample_factor)
         w_window_size = v.TextField(label=cm.param.opt.window_size, type='number', v_model=self.window_size)
@@ -228,7 +226,6 @@ class Optional(v.Card):
 
         
         link((w_lee_filter, 'v_model'),(self, 'lee_filter'))
-        link((w_speckle_filter, 'v_model'),(self, 'speckle_filter'))
         
         link((w_downsample_factor, 'v_model'),(self, 'downsample_factor'))
         link((w_window_size, 'v_model'),(self, 'window_size'))
@@ -244,7 +241,6 @@ class Optional(v.Card):
         
         self.children=[
             w_lee_filter,
-            w_speckle_filter,
             w_downsample_factor,
             w_window_size,
             w_forest_threshold,
