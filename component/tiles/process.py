@@ -10,6 +10,7 @@ from traitlets import (
     Bool, List, link
 )
 from sepal_ui import sepalwidgets as sw
+from sepal_ui.scripts import utils as su
 
 
 from ..message import cm
@@ -93,15 +94,12 @@ class Process(v.Card):
         link((self.w_gamma0, 'v_model'), (self, 'gamma0'))
         link((self.w_biomass, 'v_model'), (self, 'biomass'))        
         link((self.w_forest_cov, 'v_model'), (self, 'forest_cov'))
-        
         link((w_forest_ch_p, 'v_model'), (self, 'forest_ch_p'))
         link((self.w_biomass_ch, 'v_model'), (self, 'biomass_ch'))
         link((self.w_forest_ch, 'v_model'), (self, 'forest_ch'))
         link((self.w_def_risk, 'v_model'), (self, 'def_risk'))        
         
-        self.btn_process.on_event('click', partial(self._event, func=self._process))
-        self.btn_add_map.on_event('click', partial(self._event, func=self._display))
-        self.btn_write_raster.on_event('click', partial(self._event, func=self._write_raster))
+
         
         self.children=[v.Card(class_='pa-4', children=[
                 v.CardTitle(children=[cm.process.output_title]),
@@ -132,22 +130,15 @@ class Process(v.Card):
         # Inspect its change
     
         # Decorate loading functions
-        self._write_raster = loading(self.btn_write_raster, self.w_alert)(self._write_raster)
-        self._process = loading(self.btn_process, self.w_alert)(self._process)
-        self._display = loading(self.btn_add_map, self.w_alert)(self._display)
+        self._write_raster = su.loading_button(self.w_alert, self.btn_write_raster, True)(self._write_raster)
+        self._process =  su.loading_button(self.w_alert, self.btn_process,True)(self._process)
+        self._display =  su.loading_button(self.w_alert, self.btn_add_map,True)(self._display)
+    
+        self.btn_process.on_event('click', self._process)
+        self.btn_add_map.on_event('click', self._display)
+        self.btn_write_raster.on_event('click', self._write_raster)
     
     
-    def _event(self, widget, event, data, func):
-        """ This function is used to execute decorated 
-        functions with an event
-        
-        example:
-            
-            btn.on_event('click', partial(self._event, func=self._process))
-            where self._process is the decorated function to be executed.
-        
-        """
-        func()
     
     @observe('forest_ch', 'gamma0', 
              'biomass', 'biomass_ch', 'forest_cov', 'def_risk')
@@ -223,7 +214,7 @@ class Process(v.Card):
         self.w_select_output.items = [name for name, v in self.TILES.items() if v[2] is not None]
 
     
-    def _process(self):
+    def _process(self, *args):
         """Event trigger when btn_process is clicked
         
         * This function is decorated by loading
@@ -304,7 +295,7 @@ class Process(v.Card):
         # Update state of display/write select widget
         self._get_processed_tiles()
                         
-    def _write_raster(self):
+    def _write_raster(self, *args):
         """Write processed raster
         
         * This function is decorated by loading
@@ -331,7 +322,7 @@ class Process(v.Card):
         self.w_alert.add_msg(cm.alert.success_export.format(tile_name, self.param.output_dir), type_='success')
 
         
-    def _display(self):
+    def _display(self, *args):
         """Display processed raster.
         
         * This function is decorated by loading

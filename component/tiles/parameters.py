@@ -11,6 +11,7 @@ from traitlets import (
     observe, List, Float, Int
 )
 from sepal_ui import sepalwidgets as sw
+from sepal_ui.scripts import utils as su
 
 from ..message import cm
 from ..scripts.scripts import *
@@ -46,8 +47,7 @@ class Parameters(v.Layout):
         
         self.progress_alert = sw.Alert(children=[self.ou_progress]).hide()
 
-        # Events
-        self.required.w_download.on_event('click', self._download_event)
+
 
         self.children = [
             
@@ -76,7 +76,10 @@ class Parameters(v.Layout):
         ]
         
         # Decorate self._download() method
-        self._download = loading(self.required.w_download, self.w_alert)(self._download)
+        self._download =  su.loading_button(self.w_alert, self.required.w_download)(self._download)
+        
+        # Events
+        self.required.w_download.on_event('click', self._download_event)
         
     def _workspace(self):
         """ Creates the workspace necessary to store the data
