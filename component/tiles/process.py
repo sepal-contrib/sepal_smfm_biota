@@ -172,28 +172,24 @@ class Process(v.Card):
         assert self.param.required.year_1 <= self.param.required.year_2, assert_errors(self, cm.error.y1_lt_y2)
 
     def _load_tile(self, year):
-        try:
-            tile = biota.LoadTile(
-                str(self.param.data_dir), 
-                round_(self.param.required.lat, self.param.required.grid), 
-                round_(self.param.required.lon, self.param.required.grid), 
-                year,
-                parameter_file = self.param.PARAMETER_FILE,
-                forest_threshold = self.param.optional.forest_threshold, 
-                area_threshold = self.param.optional.area_threshold, 
-                downsample_factor = self.param.optional.downsample_factor,                
-                lee_filter = self.param.optional.lee_filter, 
-                window_size = self.param.optional.window_size,
-                contiguity = self.param.optional.contiguity,
-                output_dir = str(self.param.output_dir)
-
-            )
-            return tile
         
-        except Exception as e:
-            
-            self.w_alert.add_msg(f'{e}', type_='error')
-            raise
+        tile = biota.LoadTile(
+            str(self.param.data_dir), 
+            round_(self.param.required.lat, self.param.required.grid), 
+            round_(self.param.required.lon, self.param.required.grid), 
+            year,
+            parameter_file = self.param.PARAMETER_FILE,
+            forest_threshold = self.param.optional.forest_threshold, 
+            area_threshold = self.param.optional.area_threshold, 
+            downsample_factor = self.param.optional.downsample_factor,                
+            lee_filter = self.param.optional.lee_filter, 
+            window_size = self.param.optional.window_size,
+            contiguity = self.param.optional.contiguity,
+            output_dir = str(self.param.output_dir)
+        )
+        
+        return tile
+
             
     def _get_tiles_dictionary(self):
         
