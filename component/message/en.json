@@ -8,17 +8,46 @@
     },
     "param" : {
         "opt": {
-            "lee_filter": "Lee filter",
-            "speckle_filter": "Speckle filter",
-            "downsample_factor": "Downsample factor",
-            "window_size": "Window size",
-            "forest_threshold": "Forest threshold",
-            "area_threshold": "Area threshold",
-            "change_area_threshold": "Change area threshold",
-            "change_magnitude_threshold": "Change magnitude threshold",
-            "contiguity": "Contiguity",
-            "sm_interpolation": "SM interpolation",
-            "polarisation": "Polarisation"
+            "lee_filter": {
+                "name": "Lee filter",
+                "tooltip": "Apply a radar speckle filter to the ALOS image."
+            },
+            "downsample_factor": {
+                "name": "Downsample factor",
+                "tooltip": "Apply downsampling to inputs by specifying an integer factor to downsample by."
+            },
+            "window_size": {
+                "name": "Window size",
+                "tooltip": "Size of Lee filter window. Must be an odd integer."
+            },
+            "forest_threshold": {
+                "name": "Forest threshold",
+                "tooltip": "The theshold of aboveground biomass that separates forest from non-forest in units of tonnes carbon per hectare (tC/ha). Defaults to 10 tC/ha (approximately 10% canopy cover in soutehrn Africa)."
+            },
+            "area_threshold": {
+                "name": "Area threshold",
+                "tooltip": "Contiguous area required to meet the definiton of forest, in units of hectares. Defaults to 0 ha."
+            },
+            "change_area_threshold": {
+                "name": "Change area threshold",
+                "tooltip": "Threshold for a minimum change in forest area required to be flagged as a change."
+            },
+            "change_magnitude_threshold": {
+                "name": "Change magnitude threshold",
+                "tooltip": "The minimum absolute change in biomass to be flagged as a change. Defaults to 0 tC/ha."
+            },
+            "contiguity": {
+                "name": "Contiguity",
+                "tooltip": "When applying an area threshold, a forest area could be considered continuous when directly adjacent (\"rook's move\") or diagonally adjacent to another forest pixel (\"queen's move\"). To switch, set this parameter to either 'rook' or 'queen'. Defaults to 'queen'."
+            },
+            "sm_interpolation": {
+                "name": "SM interpolation",
+                "tooltip": ""
+            },
+            "polarisation": {
+                "name": "Polarisation",
+                "tooltip": "Polarisation for Gamma0."
+            }
         },
         "req": {
             "description" : "Note: The following are required parameters, to get coordinates, click a point over the map.",
