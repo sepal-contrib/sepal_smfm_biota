@@ -43,6 +43,8 @@ class Parameters(v.Layout):
         # Alerts
         self.w_alert = Alert(children=[cm.param.sel_param]).show()
         self.ou_progress = Output()
+        
+        self.progress_alert = sw.Alert(children=[self.ou_progress]).hide()
 
         # Events
         self.required.w_download.on_event('click', self._download_event)
@@ -69,7 +71,7 @@ class Parameters(v.Layout):
                     ),
             ]),
             v.Card(class_="flex-row pa-2 mb-3", children=[
-                self.w_alert,
+                self.w_alert, self.progress_alert
             ]),
         ]
         
@@ -105,11 +107,17 @@ class Parameters(v.Layout):
         lon = round_(self.required.lon, self.required.grid)
         assert (years != []), assert_errors(self, cm.error.at_least_year)
         
-        for y in years:
-            try:
-                self._download(lat, lon, y)
-            except:
-                pass
+        with self.ou_progress:
+            self.ou_progress.clear_output()
+            self.progress_alert.show()
+            
+            for y in years:
+                try:
+                    self.progress_alert.type='info'
+                    self._download(lat, lon, y)
+                    self.progress_alert.type='success'
+                except:
+                    pass
             
     def _download(self, *args):
         
@@ -127,7 +135,7 @@ class Parameters(v.Layout):
         self.w_alert.add_msg(cm.alert.decompressing.format(y), type_='info')
         self._decompress()
         
-        self.w_alert.add_msg(cm.alert.done_down.format(y, lat, lon), type_='info')
+        self.w_alert.add_msg(cm.alert.done_down.format(y, lat, lon), type_='success')
 
     def _decompress(self):
         
