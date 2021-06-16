@@ -115,8 +115,13 @@ class Parameters(v.Layout):
         
         lat, lon, y = args
         self.w_alert.add_msg(cm.alert.downloading.format(y,lat,lon), type_='info')
+        
+        large_tile = True
+        if self.required.grid == 1:
+            large_tile = False
+            
         dw.download(lat,lon,y,
-                    large_tile=self.required.large_tile, 
+                    large_tile=large_tile, 
                     output_dir=self.data_dir, 
                     verbose=True)
         self.w_alert.add_msg(cm.alert.decompressing.format(y), type_='info')
@@ -143,7 +148,6 @@ class Required(v.Card):
     lon = Float(-75).tag(sync=True)
     year_1 = Unicode('2016').tag(sync=True)
     year_2 = Unicode('2017').tag(sync=True)
-    large_tile = Bool(True).tag(sync=True)
     grid = Int(5).tag(sync=True)
     
     def __init__(self, **kwargs):
@@ -163,7 +167,6 @@ class Required(v.Card):
         w_year_1 = v.Select(label=cm.param.req.year1, items=valid_years, type='number', v_model=self.year_1)
         w_year_2 = v.Select(label=cm.param.req.year2, items=valid_years, type='number',v_model=self.year_2)
         
-        w_lg_tile = v.Checkbox(label=cm.param.req.largetile, v_model=self.large_tile)
         w_grid = v.RadioGroup(v_model=self.grid,children=[
             v.Radio(label=cm.param.req._1grid, value=1),
             v.Radio(label=cm.param.req._5grid, value=5)
@@ -175,7 +178,6 @@ class Required(v.Card):
         link((w_lat, 'v_model'), (self, 'lat'))
         link((w_year_1, 'v_model'), (self, 'year_1'))
         link((w_year_2, 'v_model'), (self, 'year_2'))
-        link((w_lg_tile, 'v_model'), (self, 'large_tile'))
         link((w_grid, 'v_model'), (self, 'grid'))
         
         self.children=[
@@ -184,7 +186,6 @@ class Required(v.Card):
                 w_lat_tooltip,
                 w_year_1,
                 w_year_2,
-                w_lg_tile,
                 w_grid,
                 self.w_download
         ]
@@ -197,12 +198,11 @@ class Optional(v.Card):
     window_size = CInt(5).tag(sync=True)
     forest_threshold = CFloat(10.).tag(sync=True)
     area_threshold = CFloat(0.).tag(sync=True)
-    
     change_area_threshold = CInt(2).tag(sync=True)
     change_magnitude_threshold = CInt(15).tag(sync=True)
     
     contiguity = Unicode('queen').tag(sync=True)
-    sm_interpolation = Unicode('average').tag(sync=True)
+#     sm_interpolation = Unicode('average').tag(sync=True)
     polarisation = Unicode('HV').tag(sync=True)
     
     
@@ -210,19 +210,25 @@ class Optional(v.Card):
     
         super().__init__(**kwargs)
         
-        w_lee_filter = v.Checkbox(label=cm.param.opt.lee_filter, v_model=self.lee_filter)
-        
-        w_downsample_factor = v.TextField(label=cm.param.opt.downsample_factor, type='number', v_model=self.downsample_factor)
-        w_window_size = v.TextField(label=cm.param.opt.window_size, type='number', v_model=self.window_size)
-        w_forest_threshold = v.TextField(label=cm.param.opt.forest_threshold, type='number', v_model=self.forest_threshold)
-        w_area_threshold = v.TextField(label=cm.param.opt.area_threshold, type='number', v_model=self.area_threshold)
-        
-        w_change_area_threshold = v.TextField(label=cm.param.opt.change_area_threshold, type='number', v_model=self.change_area_threshold)
-        w_change_magnitude_threshold = v.TextField(label=cm.param.opt.change_magnitude_threshold, type='number', v_model=self.change_magnitude_threshold)
-        
-        w_contiguity = v.Select(label=cm.param.opt.contiguity, items=['rook', 'queen'], v_model=self.contiguity)
-        w_sm_interpolation = v.Select(label=cm.param.opt.sm_interpolation, items=['nearest', 'average', 'cubic'], v_model=self.sm_interpolation)
-        w_polarisation = v.Select(label=cm.param.opt.polarisation, items=['HV', 'HH', 'VV', 'VH'], v_model=self.polarisation)
+        w_lee_filter = v.Checkbox(label=cm.param.opt.lee_filter.name, v_model=self.lee_filter)
+        w_downsample_factor = v.TextField(
+            label=cm.param.opt.downsample_factor.name, type='number', v_model=self.downsample_factor)
+        w_window_size = v.TextField(
+            label=cm.param.opt.window_size.name, type='number', v_model=self.window_size)
+        w_forest_threshold = v.TextField(
+            label=cm.param.opt.forest_threshold.name, type='number', v_model=self.forest_threshold)
+        w_area_threshold = v.TextField(
+            label=cm.param.opt.area_threshold.name, type='number', v_model=self.area_threshold)
+        w_change_area_threshold = v.TextField(
+            label=cm.param.opt.change_area_threshold.name, type='number', v_model=self.change_area_threshold)
+        w_change_magnitude_threshold = v.TextField(
+            label=cm.param.opt.change_magnitude_threshold.name, type='number', v_model=self.change_magnitude_threshold)
+        w_contiguity = v.Select(
+            label=cm.param.opt.contiguity.name, items=['rook', 'queen'], v_model=self.contiguity)
+#         w_sm_interpolation = v.Select(
+#             label=cm.param.opt.sm_interpolation, items=['nearest', 'average', 'cubic'], v_model=self.sm_interpolation)
+        w_polarisation = v.Select(
+            label=cm.param.opt.polarisation.name, items=['HV', 'HH', 'VV', 'VH'], v_model=self.polarisation)
 
         
         link((w_lee_filter, 'v_model'),(self, 'lee_filter'))
@@ -236,19 +242,19 @@ class Optional(v.Card):
         link((w_change_magnitude_threshold, 'v_model'),(self, 'change_magnitude_threshold'))
         
         link((w_contiguity, 'v_model'),(self, 'contiguity'))
-        link((w_sm_interpolation, 'v_model'),(self, 'sm_interpolation'))
+#         link((w_sm_interpolation, 'v_model'),(self, 'sm_interpolation'))
         link((w_polarisation, 'v_model'),(self, 'polarisation'))
         
         self.children=[
-            w_lee_filter,
-            w_downsample_factor,
-            w_window_size,
-            w_forest_threshold,
-            w_area_threshold,
-            w_change_area_threshold,
-            w_change_magnitude_threshold,
-            w_contiguity,
-            w_polarisation,
-            w_sm_interpolation,
+            sw.Tooltip(w_lee_filter,cm.param.opt.lee_filter.tooltip, bottom=True, max_width=300),
+            sw.Tooltip(w_window_size,cm.param.opt.window_size.tooltip, bottom=True, max_width=300),
+            sw.Tooltip(w_downsample_factor,cm.param.opt.downsample_factor.tooltip, bottom=True, max_width=300),
+            sw.Tooltip(w_forest_threshold,cm.param.opt.forest_threshold.tooltip, bottom=True, max_width=300),
+            sw.Tooltip(w_area_threshold,cm.param.opt.area_threshold.tooltip, bottom=True, max_width=300),
+            sw.Tooltip(w_change_area_threshold,cm.param.opt.change_area_threshold.tooltip, bottom=True, max_width=300),
+            sw.Tooltip(w_change_magnitude_threshold,cm.param.opt.change_magnitude_threshold.tooltip, bottom=True, max_width=300),
+            sw.Tooltip(w_contiguity,cm.param.opt.contiguity.tooltip, bottom=True, max_width=300),
+            sw.Tooltip(w_polarisation,cm.param.opt.polarisation.tooltip, bottom=True, max_width=300),
+#             w_sm_interpolation,
         ]
         
