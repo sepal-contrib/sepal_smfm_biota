@@ -24,7 +24,6 @@ class Process(v.Card):
     gamma0 = Bool(False).tag(sync=True)
     biomass = Bool(False).tag(sync=True)
     forest_cov = Bool(False).tag(sync=True)
-
     forest_ch_p = Bool(False).tag(sync=True)
     biomass_ch = Bool(False).tag(sync=True)
     forest_ch = Bool(False).tag(sync=True)
@@ -41,7 +40,6 @@ class Process(v.Card):
         self.tile_1 = None
         self.tile_2 = None
         self.change_tile = None
-        
         self.gamma0_tile = None
         self.biomass_tile = None
         self.biomass_ch_tile = None
@@ -100,7 +98,6 @@ class Process(v.Card):
         link((self.w_def_risk, 'v_model'), (self, 'def_risk'))        
         
 
-        
         self.children=[v.Card(class_='pa-4', children=[
                 v.CardTitle(children=[cm.process.output_title]),
                 v.CardText(class_="d-flex flex-row", children=[
@@ -112,7 +109,7 @@ class Process(v.Card):
                         sw.Tooltip(v.Flex(children=[w_year_2]), cm.outputs.tooltips.y2, top=True, bottom=False), 
                         w_forest_ch_p, v.Divider(),self. w_biomass_ch, self.w_forest_ch, self.w_def_risk,]),
                 ]),
-                sw.Tooltip(self.btn_process, cm.buttons.get_outputs.tooltip)
+                sw.Tooltip(self.btn_process, cm.buttons.get_outputs.tooltip, bottom=True)
             ]),
             self.w_alert,
             v.Card(
@@ -158,18 +155,15 @@ class Process(v.Card):
         self.biomass_ch = self.forest_ch  = self.def_risk = change['new']
     
     def _validate_inputs(self):
+
+        if self.param.optional.downsample_factor < 1:
+            raise Exception(cm.error.assert_downsampling)
+
+        if self.param.optional.window_size % 2 != 1:
+            raise Exception(cm.error.assert_widown_size_odd)
         
-        assert (self.param.required.year_1 != '') or (self.param.required.year_2 != ''), assert_errors(self, cm.error.at_least_year)
-        assert self.param.required.lat < 90. or self.param.required.lat > -90., assert_errors(self, cm.error.assert_latitude)
-        assert self.param.required.lon < 180. or self.param.required.lon > -180., assert_errors(self, cm.error.assert_longitude)
-        assert self.param.optional.downsample_factor >= 1 and type(self.param.optional.downsample_factor) == int, assert_errors(self, cm.error.assert_downsampling)
-        assert type(self.param.optional.lee_filter) == bool, assert_errors(self, cm.error.assert_lee_filter)
-        assert type(self.param.optional.window_size) == int, assert_errors(self, cm.error.assert_window_size)
-        assert self.param.optional.window_size % 2 == 1, assert_errors(self, cm.error.assert_widown_size_odd)
-        assert self.param.optional.contiguity in ['rook', 'queen'], assert_errors(self, cm.error.assert_contiguity)
-        assert type(self.param.optional.forest_threshold) == float or type(self.param.optional.forest_threshold) == int, assert_errors(self, cm.error.assert_forest_thr)
-        assert type(self.param.optional.area_threshold) == float or type(self.param.optional.area_threshold) == int, assert_errors(self, cm.error.assert_area_thr)        
-        assert self.param.required.year_1 <= self.param.required.year_2, assert_errors(self, cm.error.y1_lt_y2)
+        if self.param.required.year_1 >= self.param.required.year_2:
+            raise Exception(cm.error.y1_lt_y2)
 
     def _load_tile(self, year):
         
@@ -186,10 +180,10 @@ class Process(v.Card):
             window_size = self.param.optional.window_size,
             contiguity = self.param.optional.contiguity,
             output_dir = str(self.param.output_dir)
-        )
-        
-        return tile
 
+        )
+        return tile
+        
             
     def _get_tiles_dictionary(self):
         
