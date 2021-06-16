@@ -111,6 +111,7 @@ class Parameters(v.Layout):
         assert (years != []), assert_errors(self, cm.error.at_least_year)
         
         with self.ou_progress:
+            
             self.ou_progress.clear_output()
             self.progress_alert.show()
             
