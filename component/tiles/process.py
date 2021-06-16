@@ -176,7 +176,6 @@ class Process(v.Card):
         assert type(self.param.optional.window_size) == int, assert_errors(self, cm.error.assert_window_size)
         assert self.param.optional.window_size % 2 == 1, assert_errors(self, cm.error.assert_widown_size_odd)
         assert self.param.optional.contiguity in ['rook', 'queen'], assert_errors(self, cm.error.assert_contiguity)
-        assert self.param.optional.sm_interpolation in ['nearest', 'average', 'cubic'], assert_errors(self, cm.error.assert_sm)
         assert type(self.param.optional.forest_threshold) == float or type(self.param.optional.forest_threshold) == int, assert_errors(self, cm.error.assert_forest_thr)
         assert type(self.param.optional.area_threshold) == float or type(self.param.optional.area_threshold) == int, assert_errors(self, cm.error.assert_area_thr)        
         assert self.param.required.year_1 <= self.param.required.year_2, assert_errors(self, cm.error.y1_lt_y2)
