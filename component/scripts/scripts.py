@@ -1,3 +1,4 @@
+import math
 import requests
 import functools
 
@@ -154,7 +155,7 @@ def remove_layers_if(map_, prop, equals_to, _metadata=False):
                 if layer.attribution==equals_to: map_.remove_layer(layer)
                     
 def round_(x, grid):
-    return grid * round(x/grid)
+    return grid * math.floor(x/grid)
 
 def assert_errors(self, error):
     self.w_alert.add_msg(error, type_='error')
