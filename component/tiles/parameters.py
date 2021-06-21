@@ -162,7 +162,7 @@ class Required(v.Card):
     lon = Float(-75).tag(sync=True)
     year_1 = Unicode('2016').tag(sync=True)
     year_2 = Unicode('').tag(sync=True)
-    grid = Int(5).tag(sync=True)
+    grid = Int(1).tag(sync=True)
     single_year = Unicode('Single year').tag(sync=True)
     
     def __init__(self, **kwargs):
@@ -178,7 +178,7 @@ class Required(v.Card):
         
         # Ask if user wants to compute only one year
         self.w_years = v.RadioGroup(
-            label = "Select type of analysis",
+            label = "Type of analysis",
             row= True,
             v_model = self.single_year,
             children = [
@@ -195,7 +195,7 @@ class Required(v.Card):
         
         w_grid = v.RadioGroup(v_model=self.grid,children=[
             v.Radio(label=cm.param.req._1grid, value=1),
-            v.Radio(label=cm.param.req._5grid, value=5)
+#             v.Radio(label=cm.param.req._5grid, value=5)
         ])
         
         self.w_download = sw.Btn(cm.param.req.download, class_='pl-5')
