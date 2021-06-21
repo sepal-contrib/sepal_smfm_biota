@@ -151,7 +151,9 @@ class Parameters(v.Layout):
                 dw.decompress(str(tar))
                 self.w_alert.add_msg(cm.alert.done_unzip, type_='success')
 
-
+class Select(v.Select, sw.SepalWidget):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class Required(v.Card):
 
@@ -159,8 +161,9 @@ class Required(v.Card):
     lat = Float(0).tag(sync=True)
     lon = Float(-75).tag(sync=True)
     year_1 = Unicode('2016').tag(sync=True)
-    year_2 = Unicode('2017').tag(sync=True)
+    year_2 = Unicode('').tag(sync=True)
     grid = Int(5).tag(sync=True)
+    single_year = Unicode('Single year').tag(sync=True)
     
     def __init__(self, **kwargs):
     
@@ -173,11 +176,22 @@ class Required(v.Card):
         w_lat_tooltip = sw.Tooltip(w_lat, cm.tooltip.coordinates)
         w_lon_tooltip = sw.Tooltip(w_lon, cm.tooltip.coordinates)
         
-        # Valid years for selection
-        valid_years = [str(y) for y in list(range(2007,2010+1))+list(range(2015, datetime.now().year+1))]
+        # Ask if user wants to compute only one year
+        self.w_years = v.RadioGroup(
+            label = "Select type of analysis",
+            row= True,
+            v_model = self.single_year,
+            children = [
+                v.Radio(key=1, label='Single year', value='Single year'),
+                v.Radio(key=2, label='Multiple year', value='Multiple year'),
+            ]
+        )
         
-        w_year_1 = v.Select(label=cm.param.req.year1, items=valid_years, type='number', v_model=self.year_1)
-        w_year_2 = v.Select(label=cm.param.req.year2, items=valid_years, type='number',v_model=self.year_2)
+        # Valid years for selection
+        self.valid_years = [str(y) for y in list(range(2007,2010+1))+list(range(2015, datetime.now().year+1))]
+        
+        self.w_year_1 = v.Select(label=cm.param.req.year1, items=self.valid_years, type='number', v_model=self.year_1)
+        self.w_year_2 = Select(label=cm.param.req.year2, items=self.valid_years, type='number',v_model=self.year_2).hide()
         
         w_grid = v.RadioGroup(v_model=self.grid,children=[
             v.Radio(label=cm.param.req._1grid, value=1),
@@ -188,19 +202,39 @@ class Required(v.Card):
         
         link((w_lon, 'v_model'), (self, 'lon'))
         link((w_lat, 'v_model'), (self, 'lat'))
-        link((w_year_1, 'v_model'), (self, 'year_1'))
-        link((w_year_2, 'v_model'), (self, 'year_2'))
+        link((self.w_year_1, 'v_model'), (self, 'year_1'))
+        link((self.w_year_2, 'v_model'), (self, 'year_2'))
         link((w_grid, 'v_model'), (self, 'grid'))
         
         self.children=[
                 v.CardText(children=[cm.param.req.description]),
                 w_lon_tooltip, 
                 w_lat_tooltip,
-                w_year_1,
-                w_year_2,
+                self.w_years,
+                self.w_year_1,
+                self.w_year_2,
                 w_grid,
                 self.w_download
         ]
+        
+        self.w_years.observe(self.on_single_change, 'v_model')
+        
+    def on_single_change(self, change):
+        
+        if change['new'] == 'Single year':
+            su.hide_component(self.w_year_2)
+            self.year_2 = ''
+            
+        elif change['new'] == 'Multiple year':
+            
+            su.show_component(self.w_year_2)
+            current_year = datetime.now().year
+            
+            if int(self.year_1) < current_year:
+                self.year_2 = self.valid_years[self.valid_years.index(self.year_1)+1]
+            else:
+                self.year_2 = self.year_1
+
 
 class Optional(v.Card):
     

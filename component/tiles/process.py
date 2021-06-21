@@ -95,19 +95,26 @@ class Process(v.Card):
         link((w_forest_ch_p, 'v_model'), (self, 'forest_ch_p'))
         link((self.w_biomass_ch, 'v_model'), (self, 'biomass_ch'))
         link((self.w_forest_ch, 'v_model'), (self, 'forest_ch'))
-        link((self.w_def_risk, 'v_model'), (self, 'def_risk'))        
+        link((self.w_def_risk, 'v_model'), (self, 'def_risk'))
         
+        self.year_params = v.Card(children=[
+                        sw.Tooltip(v.Flex(children=[w_year_1]), cm.outputs.tooltips.y1, top=True, bottom=False), 
+                        w_forest_p, v.Divider(), self.w_gamma0, self.w_biomass, self.w_forest_cov,]
+        )
+        
+        
+        self.change_params = v.Card(children=[
+                        sw.Tooltip(v.Flex(children=[w_year_2]), cm.outputs.tooltips.y2, top=True, bottom=False), 
+                        w_forest_ch_p, v.Divider(),self. w_biomass_ch, self.w_forest_ch, self.w_def_risk,]
+        )
+        self.change_params.disabled = True
 
         self.children=[v.Card(class_='pa-4', children=[
                 v.CardTitle(children=[cm.process.output_title]),
                 v.CardText(class_="d-flex flex-row", children=[
-                    v.Col(children=[
-                        sw.Tooltip(v.Flex(children=[w_year_1]), cm.outputs.tooltips.y1, top=True, bottom=False), 
-                        w_forest_p, v.Divider(), self.w_gamma0, self.w_biomass, self.w_forest_cov,]),
+                    v.Col(children=[self.year_params]),
                     v.Divider(inset=True, vertical=True),
-                    v.Col(children=[
-                        sw.Tooltip(v.Flex(children=[w_year_2]), cm.outputs.tooltips.y2, top=True, bottom=False), 
-                        w_forest_ch_p, v.Divider(),self. w_biomass_ch, self.w_forest_ch, self.w_def_risk,]),
+                    v.Col(children=[self.change_params]),
                 ]),
                 sw.Tooltip(self.btn_process, cm.buttons.get_outputs.tooltip, bottom=True)
             ]),
@@ -134,9 +141,18 @@ class Process(v.Card):
         self.btn_process.on_event('click', self._process)
         self.btn_add_map.on_event('click', self._display)
         self.btn_write_raster.on_event('click', self._write_raster)
+        
+        self.param.required.w_years.observe(self.hide_change)
     
-    
-    
+    def hide_change(self, change):
+        """Disable change properties if there is only one year selected"""
+        
+        if change['new'] == 'Single year':
+            self.change_params.disabled = True
+            
+        elif change['new'] == 'Multiple year':
+            self.change_params.disabled = False
+            
     @observe('forest_ch', 'gamma0', 
              'biomass', 'biomass_ch', 'forest_cov', 'def_risk')
     def _observe_forest_p(self, *args):
@@ -161,9 +177,10 @@ class Process(v.Card):
 
         if self.param.optional.window_size % 2 != 1:
             raise Exception(cm.error.assert_widown_size_odd)
-        
-        if self.param.required.year_1 >= self.param.required.year_2:
-            raise Exception(cm.error.y1_lt_y2)
+            
+        if self.param.required.single_year == 'Multiple year':
+            if self.param.required.year_1 >= self.param.required.year_2:
+                raise Exception(cm.error.y1_lt_y2)
 
     def _load_tile(self, year):
         
