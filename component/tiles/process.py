@@ -169,8 +169,8 @@ class Process(v.Card):
         
         tile = biota.LoadTile(
             str(self.param.data_dir), 
-            round_(self.param.required.lat, self.param.required.grid), 
-            round_(self.param.required.lon, self.param.required.grid), 
+            round_(self.param.required.lat, self.param.required.grid, 'lat'), 
+            round_(self.param.required.lon, self.param.required.grid, 'lon'), 
             year,
             parameter_file = self.param.PARAMETER_FILE,
             forest_threshold = self.param.optional.forest_threshold, 

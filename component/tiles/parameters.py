@@ -106,8 +106,8 @@ class Parameters(v.Layout):
     def _download_event(self, *args):
         
         years = [int(year) for year in [self.required.year_1, self.required.year_2] if year]
-        lat = round_(self.required.lat, self.required.grid)
-        lon = round_(self.required.lon, self.required.grid)
+        lat = round_(self.required.lat, self.required.grid, 'lat')
+        lon = round_(self.required.lon, self.required.grid, 'lon')
         assert (years != []), assert_errors(self, cm.error.at_least_year)
         
         with self.ou_progress:
