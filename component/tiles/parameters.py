@@ -13,14 +13,14 @@ from traitlets import (
 from sepal_ui import sepalwidgets as sw
 from sepal_ui.scripts import utils as su
 
-from ..message import cm
-from ..scripts.scripts import *
-from ..widget.custom_widgets import *
+from component.message import cm
+from component.scripts.scripts import *
+from component.widget import *
 
         
 class Parameters(v.Layout):
     
-    def __init__(self, map_=None, **kwargs):
+    def __init__(self, **kwargs):
         
         # Widget classes
         self.class_ = "flex-column pa-2"
@@ -31,7 +31,7 @@ class Parameters(v.Layout):
         
         # Parameters
         
-        self.map_ = map_
+        self.map_tile = MapTile(parameters=self)
         
         # Set-up workspace
         self._workspace()
@@ -62,13 +62,7 @@ class Parameters(v.Layout):
                         Tabs(['Required inputs', 'Optional inputs'],
                              [self.required, self.optional])
                     ]),
-                    v.Col(
-                        children=[
-                            v.Card(class_='pa-2 justify-center', children=[
-                                map_
-                            ])
-                        ]
-                    ),
+                    v.Col(children=[self.map_tile]),
             ]),
             v.Card(class_="flex-row pa-2 mb-3", children=[
                 self.w_alert, self.progress_alert
