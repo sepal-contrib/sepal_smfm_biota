@@ -16,7 +16,7 @@ from sepal_ui.scripts import utils as su
 from component.message import cm
 from component.scripts.scripts import *
 from component.widget import *
-
+from component.parameter import *
         
 class Parameters(v.Layout):
     
@@ -30,12 +30,12 @@ class Parameters(v.Layout):
         super().__init__(**kwargs)
         
         # Parameters
-        
+        self.root_dir = root_dir
+        self.data_dir  = data_dir
+        self.output_dir = output_dir
+        self.PARAMETER_FILE = parameter_file
+
         self.map_tile = MapTile(parameters=self)
-        
-        # Set-up workspace
-        self._workspace()
-        self.PARAMETER_FILE = os.path.join(os.getcwd(), 'biota/cfg/McNicol2018.csv')
         
         # Set up process parameters
         self.required = Required(class_='pa-4')
@@ -46,7 +46,6 @@ class Parameters(v.Layout):
         self.ou_progress = Output()
         
         self.progress_alert = sw.Alert(children=[self.ou_progress]).hide()
-
 
 
         self.children = [
@@ -75,27 +74,7 @@ class Parameters(v.Layout):
         # Events
         self.required.w_download.on_event('click', self._download_event)
         
-    def _workspace(self):
-        """ Creates the workspace necessary to store the data
 
-        return:
-            Returns environment Paths
-
-        """
-
-        base_dir = Path('~').expanduser()
-
-        root_dir = base_dir/'module_results/smfm'
-        data_dir = root_dir/'data'
-        output_dir = root_dir/'outputs'
-
-        root_dir.mkdir(parents=True, exist_ok=True)
-        data_dir.mkdir(parents=True, exist_ok=True)
-        output_dir.mkdir(parents=True, exist_ok=True)
-
-        self.root_dir = root_dir
-        self.data_dir  = data_dir
-        self.output_dir = output_dir
 
     def _download_event(self, *args):
         
