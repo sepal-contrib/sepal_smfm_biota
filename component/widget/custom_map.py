@@ -21,7 +21,7 @@ class MapTile(v.Card):
         super().__init__(*args, **kwargs)
         
         self.param = parameters
-        self.map_ = m.SepalMap(world_copy_jump=True)
+        self.map_ = m.SepalMap(world_copy_jump=True, gee=False)
         
         self.lat = None
         self.lon = None
