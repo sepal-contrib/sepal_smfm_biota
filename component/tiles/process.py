@@ -1,8 +1,10 @@
 from functools import partial
 import numpy as np
-import gdal
-
 import biota
+try:
+    from osgeo import gdal
+except ImportError:
+    import gdal
 
 from ipywidgets import Output, jslink
 import ipyvuetify as v
