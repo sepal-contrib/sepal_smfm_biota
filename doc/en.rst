@@ -32,7 +32,7 @@ Navigate to the **Apps** menu by clicking on the wrench icon and typing "SMFM" i
 
     Sometimes the tool takes a few minutes to load. Wait until you see the tool's interface. In case the tool fails to load properly, as seen below, please close the tab and repeat the above steps. If this does not work, reload SEPAL.
 
-    .. figure:: _img/biota_fail.png
+    .. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_fail.png
         :alt: Failure of the BIOTA tool.
         :align: center
         :width: 600
@@ -42,7 +42,7 @@ Navigate to the **Apps** menu by clicking on the wrench icon and typing "SMFM" i
 
 You should see an interface like the one below. 
 
-.. figure:: _img/biota_interface.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_interface.png
     :alt: The SMFM BIOTA interface.
     :align: center
     :width: 600
@@ -51,7 +51,7 @@ You should see an interface like the one below.
 
     Depending on your computer screen size, sometimes the left column will be on top of the content, as seen below:
 
-    .. figure:: _img/biota_column.png
+    .. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_column.png
         :alt: Left column on top of the tool.
         :align: center
         :width: 600
@@ -60,14 +60,14 @@ You should see an interface like the one below.
     
     -   Adjust your browser zoom level, or
 
-    .. figure:: _img/biota_chrome.png
+    .. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_chrome.png
         :alt: Example of how to adjust the zoom level on Google Chrome.
         :align: center
         :width: 600
 
     -   Keep the zoom level but click outside of the column to hide it. Then, to open it again, you will need to click on the three dots located at the top right side.
 
-    .. figure:: _img/biota_three_dots.png
+    .. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_three_dots.png
         :alt: How to show the left column again.
         :align: center
         :width: 600
@@ -79,7 +79,7 @@ The first step is to select the parameters for accessing data from ALOS (JAXA). 
 
 Under :code:`Required Inputs` you need the define Latitude and Longitude coordinates. To do so, click on your point of interest on the map that is shown on the right side - this will be the upper-left coordinate of the tiles. The default values are -75 degrees for Longitude and 0 degrees for Latitude. For this exercise, we will demonstrate the steps for Tanzania (Latitude -2.54, and Longitude 31.04 - a point in-between the Moyowosi Game Reserve and the Kigosi Game Reserve, next to the border of the Getta and Kigoma regions).
 
-.. figure:: _img/biota_map.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_map.png
     :alt: Selecting a point on the map.
     :align: center
     :width: 600
@@ -94,7 +94,7 @@ The tool gives you the option to choose either 1x1 or 5x5 degree tile size. We w
 
 Before selecting :code:`Download Images`, we will look into the :code:`Optional Inputs` tab.
 
-.. figure:: _img/biota_optional_inputs_tab.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_optional_inputs_tab.png
     :alt: Location of the optional inputs tab.
     :align: center
     :width: 600
@@ -117,7 +117,7 @@ Different parameters can be changed here. These include the parameters that shou
 
 We will leave the parameters with default values.
 
-.. figure:: _img/biota_optional_inputs.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_optional_inputs.png
     :alt: Optional parameters screen.
     :align: center
     :width: 600
@@ -130,14 +130,14 @@ Now, go back to the :code:`Required Inputs` tab and click :code:`Download Images
 
 You can see the status of the downloads at the bottom of the page.
 
-.. figure:: _img/biota_download_status.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_download_status.png
     :alt: Status about the download.
     :align: center
     :width: 600
 
 Once the downloads are finalized for both years, you are able to see the downloaded files under the SEPAL :code:`Files`. Go to :code:`module_results` > :code:`smfm` > :code:`data`. 
 
-.. figure:: _img/biota_files.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_files.png
     :alt: SEPAL Files with downloaded data.
     :align: center
     :width: 600
@@ -156,14 +156,14 @@ Now that the download finished, we can process the data to produce the desired o
 
 Click on the :code:`Process` tab on the left side.
 
-.. figure:: _img/biota_process.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_process.png
     :alt: BIOTA Process window.
     :align: center
     :width: 600
 
 For Year 1, we will choose "Forest property" - this will automatically check all outputs available ("Gamma0", "Biomass", "Forest Cover"). For Year 2 we will choose "Forest Change" (changes between 2016 and 2017), which will also select all available outputs ("Biomass change", "Change type", "Deforestation risk"). These will be explained later. Now, click on :code:`Get Outputs` to start the processes.
 
-.. figure:: _img/biota_process_get.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_process_get.png
     :alt: Select outputs and start the process by clicking on "Get outputs".
     :align: center
     :width: 600
@@ -174,14 +174,14 @@ For Year 1, we will choose "Forest property" - this will automatically check all
 
 Similarly to before, the tool will show the process status at the bottom. You will also note a change of color from white to yellow next to each output. White means not started, Yellow means processing and Green means finalized.
 
-.. figure:: _img/biota_output_processing.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_output_processing.png
     :alt: Status of outputs.
     :align: center
     :width: 600
 
 Once done, you will see a message similar to the one below, and all outputs will have a green "light". 
 
-.. figure:: _img/biota_output_done.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_output_done.png
     :alt: Process finalized.
     :align: center
     :width: 600
@@ -202,7 +202,7 @@ On the same window, under :code:`Display Outputs`, you can select the process to
 
 First select Biomass. Then press :code:`Display`. You will see the map pop up on your screen:
 
-.. figure:: _img/biota_display.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_display.png
     :alt: Biomass map.
     :align: center
     :width: 600
@@ -211,7 +211,7 @@ This is showing above-ground biomass in tonnes per hectare (tC/ha) for the 1x1 d
 
 If you followed these exact steps, your outputs should look similar to the ones below: 
 
-.. figure:: _img/biota_all.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_all.png
     :alt: BIOTA outputs for Tanzania.
     :align: center
     :width: 600
@@ -243,14 +243,14 @@ There are 7 change types described in the BIOTA tool, each of which is defined a
 
 You can also use the :code:`Write Raster` option to save this map into your SEPAL account. Once you click on `Write Raster` you should see a message in green informing that your export has been completed.
 
-.. figure:: _img/biota_export.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_export.png
     :alt: Map export complete for the Change type output.
     :align: center
     :width: 600
 
 Then, the file will be located in your SEPAL Files. You can download this map by selecting it and clicking on the Download button at the top right corner. This will download the output as a TIF file that can be used in a GIS software.
 
-.. figure:: _img/biota_export_file.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_export_file.png
     :alt: Exported map in the Files.
     :align: center
     :width: 600
@@ -271,7 +271,7 @@ On the left side, you can access:
 -   Wiki: the "README" file of the tool, you can find additional information and instructions about how to use the tool.
 -   Bug report: in case you notice a bug or have issues using the tool, use this option to report the bug or issue. This will take you to an issue creation page on the GitHub repository of the tool.
 
-.. figure:: _img/biota_resources.png
+.. figure:: https://raw.githubusercontent.com/dfguerrerom/sepal_smfm_biota/main/doc/_img/biota_resources.png
     :alt: Additional Resources.
     :align: center
     :width: 600
