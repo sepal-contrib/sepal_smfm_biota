@@ -35,6 +35,8 @@ Navigate to the **Apps** menu by clicking on the wrench icon and typing "SMFM" i
     .. figure:: _img/biota_fail.png
         :alt: Failure of the BIOTA tool.
         :align: center
+        :width: 600
+        
 
     If none of these steps work, you might need to start another instance. Please see `Introduction to SEPAL <https://docs.sepal.io/en/latest/setup/presentation.html#terminal-tab>`_ for steps on how to use the terminal to start a higher instance. A 'm4' instance should be enough.
 
@@ -43,6 +45,7 @@ You should see an interface like the one below.
 .. figure:: _img/biota_interface.png
     :alt: The SMFM BIOTA interface.
     :align: center
+    :width: 600
 
 .. tip::
 
@@ -51,6 +54,7 @@ You should see an interface like the one below.
     .. figure:: _img/biota_column.png
         :alt: Left column on top of the tool.
         :align: center
+        :width: 600
 
     If this is the case, you can:
     
@@ -59,12 +63,14 @@ You should see an interface like the one below.
     .. figure:: _img/biota_chrome.png
         :alt: Example of how to adjust the zoom level on Google Chrome.
         :align: center
+        :width: 600
 
     -   Keep the zoom level but click outside of the column to hide it. Then, to open it again, you will need to click on the three dots located at the top right side.
 
     .. figure:: _img/biota_three_dots.png
         :alt: How to show the left column again.
         :align: center
+        :width: 600
 
 Downloading the ALOS mosaics
 """"""""""""""""""""""""""""
@@ -76,6 +82,7 @@ Under :code:`Required Inputs` you need the define Latitude and Longitude coordin
 .. figure:: _img/biota_map.png
     :alt: Selecting a point on the map.
     :align: center
+    :width: 600
 
 .. note::
 
@@ -90,6 +97,7 @@ Before selecting :code:`Download Images`, we will look into the :code:`Optional 
 .. figure:: _img/biota_optional_inputs_tab.png
     :alt: Location of the optional inputs tab.
     :align: center
+    :width: 600
 
 Different parameters can be changed here. These include the parameters that should be calibrated according to your area of interest and specific forest characteristics. Default values are specific to southern African forests.
 
@@ -112,6 +120,7 @@ We will leave the parameters with default values.
 .. figure:: _img/biota_optional_inputs.png
     :alt: Optional parameters screen.
     :align: center
+    :width: 600
 
 Now, go back to the :code:`Required Inputs` tab and click :code:`Download Images` at the bottom. This will download all ALOS data tiles into your SEPAL account.
 
@@ -124,12 +133,14 @@ You can see the status of the downloads at the bottom of the page.
 .. figure:: _img/biota_download_status.png
     :alt: Status about the download.
     :align: center
+    :width: 600
 
 Once the downloads are finalized for both years, you are able to see the downloaded files under the SEPAL :code:`Files`. Go to :code:`module_results` > :code:`smfm` > :code:`data`. 
 
 .. figure:: _img/biota_files.png
     :alt: SEPAL Files with downloaded data.
     :align: center
+    :width: 600
 
 Here is a demonstration of the above steps:
 
@@ -148,12 +159,14 @@ Click on the :code:`Process` tab on the left side.
 .. figure:: _img/biota_process.png
     :alt: BIOTA Process window.
     :align: center
+    :width: 600
 
 For Year 1, we will choose "Forest property" - this will automatically check all outputs available ("Gamma0", "Biomass", "Forest Cover"). For Year 2 we will choose "Forest Change" (changes between 2016 and 2017), which will also select all available outputs ("Biomass change", "Change type", "Deforestation risk"). These will be explained later. Now, click on :code:`Get Outputs` to start the processes.
 
 .. figure:: _img/biota_process_get.png
     :alt: Select outputs and start the process by clicking on "Get outputs".
     :align: center
+    :width: 600
 
 .. note::
 
@@ -164,12 +177,14 @@ Similarly to before, the tool will show the process status at the bottom. You wi
 .. figure:: _img/biota_output_processing.png
     :alt: Status of outputs.
     :align: center
+    :width: 600
 
 Once done, you will see a message similar to the one below, and all outputs will have a green "light". 
 
 .. figure:: _img/biota_output_done.png
     :alt: Process finalized.
     :align: center
+    :width: 600
 
 Here is a demonstration of the above steps:
 
@@ -190,6 +205,7 @@ First select Biomass. Then press :code:`Display`. You will see the map pop up on
 .. figure:: _img/biota_display.png
     :alt: Biomass map.
     :align: center
+    :width: 600
 
 This is showing above-ground biomass in tonnes per hectare (tC/ha) for the 1x1 degree tile in Tanzania. To go back to the interface and select the other outputs, you can click anywhere on the screen outside of the map and do the same for the other results.
 
@@ -198,6 +214,7 @@ If you followed these exact steps, your outputs should look similar to the ones 
 .. figure:: _img/biota_all.png
     :alt: BIOTA outputs for Tanzania.
     :align: center
+    :width: 600
 
 A summary of each output is described in the table below:
 
@@ -229,12 +246,14 @@ You can also use the :code:`Write Raster` option to save this map into your SEPA
 .. figure:: _img/biota_export.png
     :alt: Map export complete for the Change type output.
     :align: center
+    :width: 600
 
 Then, the file will be located in your SEPAL Files. You can download this map by selecting it and clicking on the Download button at the top right corner. This will download the output as a TIF file that can be used in a GIS software.
 
 .. figure:: _img/biota_export_file.png
     :alt: Exported map in the Files.
     :align: center
+    :width: 600
 
 Here is a demonstration of the above steps:
 
@@ -255,3 +274,4 @@ On the left side, you can access:
 .. figure:: _img/biota_resources.png
     :alt: Additional Resources.
     :align: center
+    :width: 600
