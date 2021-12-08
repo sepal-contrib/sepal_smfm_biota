@@ -4,6 +4,7 @@ wheel
 Cython
 pybind11
 
+
 # if you require GDAL and or pyproj in your module please uncomment these lines
 # there are set up to be inlined with SEPAL implementation of GDAL and PROJ version
 GDAL==3.0.4
@@ -18,6 +19,7 @@ git+git://github.com/openforis/earthengine-api.git@v0.1.270#egg=earthengine-api&
 
 
 # custom libs
+tqdm==4.62.3
 numpy==1.17.4
 ipyvuetify==1.8.1
 Shapely==1.7.1
