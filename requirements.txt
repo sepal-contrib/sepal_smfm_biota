@@ -13,6 +13,10 @@ pyproj<3.0.0
 # don't forget to fix it to a specific version when you're app is ready
 sepal_ui==2.4.0
 
+# uncomment if you want to run your module with GEE in SEPAL
+git+git://github.com/openforis/earthengine-api.git@v0.1.270#egg=earthengine-api&subdirectory=python
+
+
 # custom libs
 numpy==1.17.4
 ipyvuetify==1.8.1
@@ -23,6 +27,7 @@ matplotlib==3.1.2
 ipyleaflet==0.13.3
 planet==1.4.7
 scikit-image==0.18.3
+cryptography>=2.1.4
 
 # module libs
 git+git://github.com/dfguerrerom/biota.git
