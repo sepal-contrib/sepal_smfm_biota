@@ -147,7 +147,6 @@ Here is a demonstration of the above steps:
 .. youtube:: d759Aqi85HE
     :height: 315
     :width: 560
-    :align: center
 
 Processing the data and producing outputs
 """""""""""""""""""""""""""""""""""""""""
@@ -191,7 +190,6 @@ Here is a demonstration of the above steps:
 .. youtube:: OMGESeERRGo
     :height: 315
     :width: 560
-    :align: start
 
 Displaying your outputs
 """""""""""""""""""""""
@@ -260,7 +258,6 @@ Here is a demonstration of the above steps:
 .. youtube:: my8U5TaV9IU
     :height: 315
     :width: 560
-    :align: start
 
 Additional Resources
 """"""""""""""""""""
