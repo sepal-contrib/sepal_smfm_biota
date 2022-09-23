@@ -2,6 +2,47 @@ import math
 import requests
 import functools
 
+def loading(btn, alert):
+    """Decorator to execute try/except sentence
+    and toggle loading button object
+    
+    Params:
+        btn (v.Btn): Button to toggle loading
+        alert (sw.Alert): Alert to display errors
+    
+    Example:
+        
+        class A:
+            
+            # ...
+        
+            self.process = loading(self.btn, self.alert)(self.process)
+
+        def _process_event(self, widget, event, data):
+            self.process()
+
+        def process(self):
+
+            '''This will raise and exception'''
+            sleep(3)
+            assert 1<0, 'This error will be displayed on the alert widget'
+    """
+    def decorator_loading(func):
+        @functools.wraps(func)
+        def wrapper_loading(*args, **kwargs):
+            btn.loading=True
+            try:
+                value = func(*args, **kwargs)
+            except Exception as e:
+                btn.loading=False
+                alert.add_msg(f'{e}', type_='error')
+                raise e
+            btn.loading=False
+            return value
+        return wrapper_loading
+    return decorator_loading
+
+
 def remove_layers_if(map_, prop, equals_to, _metadata=False):
     """Remove layers with a given property and value
     
