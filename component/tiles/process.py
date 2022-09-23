@@ -49,7 +49,7 @@ class Process(v.Card):
         self.forest_cov_tile = None
         self.def_risk_tile = None
         
-        self.w_alert = Alert(children=[cm.alert.select_proc]).show()
+        self.w_alert = sw.Alert(children=[cm.alert.select_proc]).show()
         
         w_forest_p = v.Checkbox(label=cm.outputs.forest_property, class_='pl-5', v_model=self.forest_p)
         self.w_gamma0 = CheckboxState(label=cm.outputs.gamma, v_model=self.gamma0)
