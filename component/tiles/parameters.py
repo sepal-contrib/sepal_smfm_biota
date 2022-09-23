@@ -42,7 +42,7 @@ class Parameters(v.Layout):
         self.optional = Optional(class_='pa-4')
         
         # Alerts
-        self.w_alert = Alert(children=[cm.param.sel_param]).show()
+        self.w_alert = sw.Alert(children=[cm.param.sel_param]).show()
         self.ou_progress = Output()
         
         self.progress_alert = sw.Alert(children=[self.ou_progress]).hide()
@@ -69,7 +69,7 @@ class Parameters(v.Layout):
         ]
         
         # Decorate self._download() method
-        self._download =  su.loading_button(self.w_alert, self.required.w_download)(self._download)
+        self._download =  su.loading_button(self.w_alert, self.required.w_download, debug=True)(self._download)
         
         # Events
         self.required.w_download.on_event('click', self._download_event)
@@ -104,11 +104,17 @@ class Parameters(v.Layout):
         large_tile = True
         if self.required.grid == 1:
             large_tile = False
-            
-        dw.download(lat,lon,y,
-                    large_tile=large_tile, 
-                    output_dir=self.data_dir, 
-                    verbose=True)
+        
+        try:
+            dw.download(lat,lon,y,
+                        large_tile=large_tile, 
+                        output_dir=self.data_dir, 
+                        verbose=True)
+        except ValueError as e:
+            if "already exists" in next(iter(e.args)):
+                # To those files that were downloaded but un-decompressed
+                pass
+                
         self.w_alert.add_msg(cm.alert.decompressing.format(y), type_='info')
         self._decompress()
         
@@ -116,13 +122,17 @@ class Parameters(v.Layout):
 
     def _decompress(self):
         
-        tar_files = list(self.data_dir.glob('*.tar.gz'))
+        tar_files = list(self.data_dir.glob('*.tar.gz')) + list(self.data_dir.glob('*.zip'))
 
         for tar in tar_files:
             if not os.path.exists(os.path.join(self.data_dir, tar.name[:-7])):
                 self.w_alert.add_msg(cm.alert.decompressingtar.format(tar.name), type_='info')
-                dw.decompress(str(tar))
-                self.w_alert.add_msg(cm.alert.done_unzip, type_='success')
+                try:
+                    # If there's not file, it will raise an exception and will stop the execution
+                    dw.decompress(str(tar))
+                    self.w_alert.add_msg(cm.alert.done_unzip, type_='success')
+                except:
+                    continue
 
 class Select(v.Select, sw.SepalWidget):
     def __init__(self, *args, **kwargs):
