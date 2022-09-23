@@ -1,4 +1,7 @@
+import inspect
+import biota
 from pathlib import Path
 
 # Parameter file
-parameter_file = Path(__file__).parents[2]/'biota/cfg/McNicol2018.csv'
+biota_root = Path(inspect.getabsfile(biota)).parent
+parameter_file = biota_root/"cfg/McNicol2018.csv"
