@@ -3,13 +3,13 @@ import numpy as np
 
 from ipywidgets import Output
 import ipyvuetify as v
-from ipyleaflet import Marker, GeoJSON, WidgetControl
+from ipyleaflet import AwesomeIcon, GeoJSON, WidgetControl, Marker
 from shapely.geometry import Polygon
 
 from sepal_ui import mapping as m
+from sepal_ui import color
 
 from component.scripts.scripts import *
-
 class MapTile(v.Card):
     
     
@@ -21,8 +21,9 @@ class MapTile(v.Card):
         super().__init__(*args, **kwargs)
         
         self.param = parameters
-        self.map_ = m.SepalMap(world_copy_jump=True, gee=False)
-        
+        self.map_ = m.SepalMap(gee=False)
+        self.map_.default_style = {"cursor": "crosshair"}
+
         self.lat = None
         self.lon = None
         
@@ -46,9 +47,9 @@ class MapTile(v.Card):
     
         data = gpd.GeoDataFrame(geometry=[Polygon(coords)]).__geo_interface__
         
-        geojson = GeoJSON(data=data, _metadata={'type':'square'})
+        geojson = GeoJSON(data=data, _metadata={'type':'square'}, name="AOI")
         geojson.__setattr__('_metadata', {'type':'square'})
-        
+                
         return geojson
         
     def return_coordinates(self, **kwargs):
@@ -70,10 +71,19 @@ class MapTile(v.Card):
 
             self.lat, self.lon = kwargs.get('coordinates')
             
+            marker_icon = AwesomeIcon(
+                name='fas fa-bullseye',
+                marker_color='darkred',
+                icon_color='white',
+                spin=False
+            )
+            
             marker = Marker(
                 location=kwargs.get('coordinates'), 
                 draggable=False, 
-                _metadata={'type':'marker'}
+                _metadata={'type':'marker'},
+                name="AOI Point",
+                icon=marker_icon,
             )
             
             marker.__setattr__('_metadata', {'type':'marker'})
