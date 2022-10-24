@@ -3,7 +3,6 @@
 wheel
 Cython
 pybind11
-
 # module libs (it will isntall also their requirements)
 git+https://github.com/dfguerrerom/biota.git
 
