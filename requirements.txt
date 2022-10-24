@@ -7,10 +7,6 @@ pybind11
 # module libs (it will isntall also their requirements)
 git+https://github.com/dfguerrerom/biota.git
 
-
-# if you require GDAL and or pyproj in your module please uncomment these lines
-# there are set up to be inlined with SEPAL implementation of GDAL and PROJ version
-GDAL==3.4.3
 pyproj<3.0.0
 
 # uncomment if you want to run your module with GEE in SEPAL
@@ -24,3 +20,7 @@ shapely==1.8.3
 # widgets are not displayed when using ipyvuetify==1.8.4 and ipywidgets==8.0.2
 ipyvuetify==1.8.2
 ipywidgets==7.6.5
+
+# by setting numpy as requirement, it will be installed before gdal, avoiding
+# the gdal_array import error. check #42 and https://github.com/OSGeo/gdal/pull/2281
+GDAL[numpy]==3.4.3
