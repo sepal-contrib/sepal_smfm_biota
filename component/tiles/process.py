@@ -1,18 +1,16 @@
-from functools import partial
-import numpy as np
 import biota
+import numpy as np
 
 try:
     from osgeo import gdal
 except ImportError:
     import gdal
 
-from ipywidgets import Output, jslink
 import ipyvuetify as v
-from traitlets import Bool, List, link
+from ipywidgets import Output, jslink
 from sepal_ui import sepalwidgets as sw
 from sepal_ui.scripts import utils as su
-
+from traitlets import Bool, List, link, observe
 
 from ..message import cm
 from ..scripts.scripts import *
@@ -195,8 +193,7 @@ class Process(v.Card):
         self.param.required.w_years.observe(self.hide_change)
 
     def hide_change(self, change):
-        """Disable change properties if there is only one year selected"""
-
+        """Disable change properties if there is only one year selected."""
         if change["new"] == "Single year":
             self.change_params.disabled = True
 
@@ -205,18 +202,18 @@ class Process(v.Card):
 
     @observe("forest_ch", "gamma0", "biomass", "biomass_ch", "forest_cov", "def_risk")
     def _observe_forest_p(self, *args):
-        """Get a list of current active processes (checkboxes)"""
+        """Get a list of current active processes (checkboxes)."""
         self._get_tiles_dictionary()
         self.true_cb = [k for k, v in self.TILES.items() if v[0] is True]
 
     @observe("forest_p")
     def _select_forest_property(self, change):
-        """Activate/deactivate all forest property checkboxes"""
+        """Activate/deactivate all forest property checkboxes."""
         self.gamma0 = self.biomass = self.forest_cov = change["new"]
 
     @observe("forest_ch_p")
     def _select_change_property(self, change):
-        """Activate/deactivate all forest change checkboxes"""
+        """Activate/deactivate all forest change checkboxes."""
         self.biomass_ch = self.forest_ch = self.def_risk = change["new"]
 
     def _validate_inputs(self):
@@ -268,19 +265,18 @@ class Process(v.Card):
         }
 
     def _get_processed_tiles(self):
-        """Get tiles that are already processed and ready for view or write"""
+        """Get tiles that are already processed and ready for view or write."""
         self._get_tiles_dictionary()
         self.w_select_output.items = [
             name for name, v in self.TILES.items() if v[2] is not None
         ]
 
     def _process(self, *args):
-        """Event trigger when btn_process is clicked
+        """Event trigger when btn_process is clicked.
 
         * This function is decorated by loading
 
         """
-
         # Raise error if validation doesn't pass
         self._validate_inputs()
 
@@ -357,7 +353,7 @@ class Process(v.Card):
         self._get_processed_tiles()
 
     def _write_raster(self, *args):
-        """Write processed raster
+        """Write processed raster.
 
         * This function is decorated by loading
 
@@ -365,7 +361,6 @@ class Process(v.Card):
             widget (ipywidgets): w_select_output with list of possible processed rasters (self.TILES)
 
         """
-
         # Get current raster tile name
         tile_name = self.w_select_output.v_model
 
@@ -396,7 +391,6 @@ class Process(v.Card):
             widget (ipywidgets): w_select_output with list of possible processed rasters (self.TILES)
 
         """
-
         # Get current raster tile name
         tile_name = self.w_select_output.v_model
 
@@ -421,7 +415,7 @@ class Process(v.Card):
                 )
             elif tile_name == "Forest cover":
                 title, cbartitle, vmin, vmax, cmap = (
-                    f"Woody Cover",
+                    "Woody Cover",
                     "decibels",
                     0,
                     1,
