@@ -16,7 +16,6 @@ from component.widget import *
 
 class Parameters(v.Layout):
     def __init__(self, **kwargs):
-
         # Widget classes
         self.class_ = "flex-column pa-2"
         self.row = True
@@ -72,15 +71,14 @@ class Parameters(v.Layout):
         ]
 
         # Decorate self._download() method
-        self._download = su.loading_button(
-            self.w_alert, self.required.w_download, debug=True
-        )(self._download)
+        self._download = su.loading_button(self.w_alert, self.required.w_download)(
+            self._download
+        )
 
         # Events
         self.required.w_download.on_event("click", self._download_event)
 
     def _download_event(self, *args):
-
         years = [
             int(year) for year in [self.required.year_1, self.required.year_2] if year
         ]
@@ -89,7 +87,6 @@ class Parameters(v.Layout):
         assert years != [], assert_errors(self, cm.error.at_least_year)
 
         with self.ou_progress:
-
             self.ou_progress.clear_output()
             self.progress_alert.show()
 
@@ -102,7 +99,6 @@ class Parameters(v.Layout):
                     pass
 
     def _download(self, *args):
-
         lat, lon, y = args
         self.w_alert.add_msg(cm.alert.downloading.format(y, lat, lon), type_="info")
 
@@ -130,7 +126,6 @@ class Parameters(v.Layout):
         self.w_alert.add_msg(cm.alert.done_down.format(y, lat, lon), type_="success")
 
     def _decompress(self):
-
         tar_files = list(self.data_dir.glob("*.tar.gz")) + list(
             self.data_dir.glob("*.zip")
         )
@@ -154,7 +149,6 @@ class Select(v.Select, sw.SepalWidget):
 
 
 class Required(v.Card):
-
     # Initial widgets
     lat = Float(0).tag(sync=True)
     lon = Float(-75).tag(sync=True)
@@ -164,7 +158,6 @@ class Required(v.Card):
     single_year = Unicode("Single year").tag(sync=True)
 
     def __init__(self, **kwargs):
-
         super().__init__(**kwargs)
 
         # 1. .Input widgets (Parameters)
@@ -243,13 +236,11 @@ class Required(v.Card):
         self.w_years.observe(self.on_single_change, "v_model")
 
     def on_single_change(self, change):
-
         if change["new"] == "Single year":
             su.hide_component(self.w_year_2)
             self.year_2 = ""
 
         elif change["new"] == "Multiple year":
-
             su.show_component(self.w_year_2)
             current_year = datetime.now().year
 
@@ -260,7 +251,6 @@ class Required(v.Card):
 
 
 class Optional(v.Card):
-
     lee_filter = Bool(True).tag(sync=True)
 
     downsample_factor = CInt(1).tag(sync=True)
@@ -275,7 +265,6 @@ class Optional(v.Card):
     polarisation = Unicode("HV").tag(sync=True)
 
     def __init__(self, **kwargs):
-
         super().__init__(**kwargs)
 
         w_lee_filter = v.Checkbox(
