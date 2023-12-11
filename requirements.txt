@@ -5,7 +5,8 @@ voila
 git+https://github.com/dfguerrerom/biota.git
 
 
-git+https://github.com/12rambau/sepal_ui.git@sepal_pre_release
+sepal_ui==2.17
+
 
 shapely
 
