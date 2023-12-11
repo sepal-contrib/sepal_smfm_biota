@@ -1,3 +1,13 @@
+## 0.2.0 (2023-12-11)
+
+### Feat
+
+- use sepal_ui==2.17 to avoid conflicts with ipyleaflet
+
+### Refactor
+
+- **decorator**: drop debug param
+
 ## 0.1.0 (2023-10-11)
 
 ### Feat
