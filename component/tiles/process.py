@@ -176,15 +176,11 @@ class Process(v.Card):
         # Inspect its change
 
         # Decorate loading functions
-        self._write_raster = su.loading_button(
-            self.w_alert, self.btn_write_raster, True
-        )(self._write_raster)
-        self._process = su.loading_button(self.w_alert, self.btn_process, True)(
-            self._process
+        self._write_raster = su.loading_button(self.w_alert, self.btn_write_raster)(
+            self._write_raster
         )
-        self._display = su.loading_button(self.w_alert, self.btn_add_map, True)(
-            self._display
-        )
+        self._process = su.loading_button(self.w_alert, self.btn_process)(self._process)
+        self._display = su.loading_button(self.w_alert, self.btn_add_map)(self._display)
 
         self.btn_process.on_event("click", self._process)
         self.btn_add_map.on_event("click", self._display)
