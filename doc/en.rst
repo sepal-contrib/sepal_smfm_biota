@@ -276,5 +276,3 @@ On the left side, you can access:
     :alt: Additional resources
     :align: center
     :width: 600
-
-.. custom-edit:: https://raw.githubusercontent.com/sepal-contrib/sepal_smfm_biota/release/doc/en.rst
