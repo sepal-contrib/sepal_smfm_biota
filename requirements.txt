@@ -12,4 +12,4 @@ shapely
 
 # by setting numpy as requirement, it will be installed before gdal, avoiding
 # the gdal_array import error. check #42 and https://github.com/OSGeo/gdal/pull/2281
-GDAL[numpy]==3.6.4
+GDAL[numpy]==3.8.3
