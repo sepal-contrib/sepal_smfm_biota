@@ -5,14 +5,11 @@ voila
 git+https://github.com/dfguerrerom/biota.git
 
 
-# Fixes authentication process
-git+https://github.com/12rambau/sepal_ui.git@sepal_pre_release
+sepal_ui==2.20.0
+rasterio<1.3.11 # Leave it here even if it's already in the sepal_ui requirements. Check https://github.com/openforis/sepal/issues/328
 
 shapely
 
 # by setting numpy as requirement, it will be installed before gdal, avoiding
 # the gdal_array import error. check #42 and https://github.com/OSGeo/gdal/pull/2281
 GDAL[numpy]==3.8.3
-
-
-# trigger build
